@@ -2,9 +2,11 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 
-	"github.com/stianeikeland/go-rpio"
+	mqtt "github.com/eclipse/paho.mqtt.golang"
+	// rpio "github.com/stianeikeland/go-rpio"
 )
 
 var ADDRESS string
@@ -17,9 +19,10 @@ func main() {
 	ADDRESS = os.Args[1]
 	fmt.Println(ADDRESS)
 
-	if err := rpio.Open(); err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
-
+	// if err := rpio.Open(); err != nil {
+	// 	fmt.Println(err)
+	// 	os.Exit(1)
+	// }
+	mqtt.ERROR = log.New(os.Stdout, "[ERROR] ", 0)
+	fmt.Println("Finished!")
 }
