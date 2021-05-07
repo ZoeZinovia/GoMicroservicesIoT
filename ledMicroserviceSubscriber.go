@@ -2,10 +2,8 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"os"
 
-	mqtt "github.com/eclipse/paho.mqtt.golang"
 	rpio "github.com/stianeikeland/go-rpio"
 )
 
@@ -23,6 +21,10 @@ func main() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-	mqtt.ERROR = log.New(os.Stdout, "[ERROR] ", 0)
+
+	ledPin := rpio.Pin(12)
+	ledPin.Output()
+	ledPin.High()
+
 	fmt.Println("Finished!")
 }
