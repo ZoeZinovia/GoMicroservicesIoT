@@ -51,12 +51,16 @@ func main() {
 	}
 
 	topic := "led"
-	token := client.Subscribe(topic, 0, nil)
+	// token := client.Subscribe(topic, 0, nil)
+	// token.Wait()
+	token := client.Publish(topic, 0, false, "Hello!")
 	token.Wait()
 
 	// ledPin := rpio.Pin(12)
 	// ledPin.Output()
 	// ledPin.Low()
+	// time.Sleep(10 * time.Second)
+	client.Disconnect(100)
 
 	fmt.Println("Subscribed to the topic!")
 }
