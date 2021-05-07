@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"time"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 	rpio "github.com/stianeikeland/go-rpio"
@@ -50,11 +51,13 @@ func main() {
 		panic(token.Error())
 	}
 
-	topic := "led"
+	sub(client)
+	publish(client)
+	// topic := "led"
 	// token := client.Subscribe(topic, 0, nil)
 	// token.Wait()
-	token := client.Publish(topic, 0, false, "Hello!")
-	token.Wait()
+	// token := client.Publish(topic, 0, false, "Hello!")
+	// token.Wait()
 
 	// ledPin := rpio.Pin(12)
 	// ledPin.Output()
@@ -63,4 +66,21 @@ func main() {
 	client.Disconnect(100)
 
 	fmt.Println("Subscribed to the topic!")
+}
+
+func sub(client mqtt.Client) {
+	topic := "led"
+	token := client.Subscribe(topic, 1, nil)
+	token.Wait()
+	fmt.Printf("Subscribed to topic: %s", topic)
+}
+
+func publish(client mqtt.Client) {
+	num := 10
+	for i := 0; i < num; i++ {
+		text := fmt.Sprintf("Message %d", i)
+		token := client.Publish("led", 0, false, text)
+		token.Wait()
+		time.Sleep(time.Second)
+	}
 }
