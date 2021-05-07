@@ -52,7 +52,7 @@ func main() {
 	}
 
 	sub(client)
-	publish(client)
+	// publish(client)
 	// topic := "led"
 	// token := client.Subscribe(topic, 0, nil)
 	// token.Wait()
