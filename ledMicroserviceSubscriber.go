@@ -24,7 +24,7 @@ func main() {
 
 	ledPin := rpio.Pin(12)
 	ledPin.Output()
-	ledPin.High()
+	ledPin.Low()
 
 	fmt.Println("Finished!")
 }
