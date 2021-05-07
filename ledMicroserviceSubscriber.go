@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"os"
+	"os/signal"
+	"syscall"
 	"time"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
@@ -36,6 +38,13 @@ func main() {
 		os.Exit(1)
 	}
 
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
+	go func() {
+		<-c
+		os.Exit(0)
+	}()
+
 	// var broker =
 	// var port = 1883
 	opts := mqtt.NewClientOptions()
@@ -63,6 +72,10 @@ func main() {
 	// ledPin.Output()
 	// ledPin.Low()
 	// time.Sleep(10 * time.Second)
+
+	for {
+		//Do nothing
+	}
 	client.Disconnect(100)
 
 	fmt.Println("Subscribed to the topic!")
