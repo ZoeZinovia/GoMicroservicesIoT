@@ -27,7 +27,7 @@ var messagePubHandler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Me
 		sessionStatus = false
 	} else {
 		json.Unmarshal([]byte(msg.Payload()), &led)
-		fmt.Println(led.LED_1)
+		fmt.Println(led)
 		ledPin := rpio.Pin(led.GPIO)
 		ledPin.Output()
 		if led.LED_1 {
