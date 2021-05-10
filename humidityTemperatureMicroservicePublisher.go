@@ -9,6 +9,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/d2r2/go-dht"
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 )
 
@@ -39,17 +40,17 @@ var messagePubHandler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Me
 }
 
 func publish(client mqtt.Client) {
-	// temperatureReading, humidityReading, _, err :=
-	// 	dht.ReadDHTxxWithRetry(dht.DHT11, 4, false, 10)
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
+	temperatureReading, humidityReading, _, err :=
+		dht.ReadDHTxxWithRetry(dht.DHT11, 4, false, 10)
+	if err != nil {
+		log.Fatal(err)
+	}
 	currentTemperature := tempStruct{
-		Temp: 12,
+		Temp: temperatureReading,
 		Unit: "C",
 	}
 	currentHumidity := humStruct{
-		Humidity: 12,
+		Humidity: humidityReading,
 		Unit:     "%",
 	}
 	jsonTemperature := currentTemperature.structToJSON()
