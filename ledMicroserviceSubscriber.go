@@ -1,9 +1,11 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 	"time"
 
@@ -19,20 +21,20 @@ type ledStruct struct {
 }
 
 var messagePubHandler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Message) {
-	// var led ledStruct
+	var led ledStruct
 	fmt.Printf("Received message: %T from topic: %s\n", msg.Payload(), msg.Topic())
-	// if strings.Contains(msg.Payload(), "Done") {
-	// 	sessionStatus = false
-	// } else {
-	// 	json.Unmarshal([]byte(msg.Payload()), &led)
-	// 	ledPin := rpio.Pin(led.GPIO)
-	// 	ledPin.Output()
-	// 	if led.LED_1 {
-	// 		ledPin.High()
-	// 	} else {
-	// 		ledPin.Low()
-	// 	}
-	// }
+	if strings.Contains(string(msg.Payload()), "Done") {
+		sessionStatus = false
+	} else {
+		json.Unmarshal([]byte(msg.Payload()), &led)
+		ledPin := rpio.Pin(led.GPIO)
+		ledPin.Output()
+		if led.LED_1 {
+			ledPin.High()
+		} else {
+			ledPin.Low()
+		}
+	}
 }
 
 var connectHandler mqtt.OnConnectHandler = func(client mqtt.Client) {
