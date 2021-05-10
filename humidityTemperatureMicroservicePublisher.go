@@ -113,7 +113,7 @@ func main() {
 	opts := mqtt.NewClientOptions()
 	opts.AddBroker(fmt.Sprintf("tcp://%s:%d", ADDRESS, PORT))
 	opts.SetClientID("go_mqtt_client")
-	opts.SetDefaultPublishHandler(messagePubHandler)
+	// opts.SetDefaultPublishHandler(messagePubHandler)
 	opts.OnConnect = connectHandler
 	opts.OnConnectionLost = connectLostHandler
 	client := mqtt.NewClient(opts)
@@ -122,7 +122,7 @@ func main() {
 	}
 
 	// Subscribe to topic
-	token := client.Subscribe(TOPIC, 1, nil)
+	token := client.Subscribe(TOPIC_T, 1, nil)
 	token.Wait()
 
 	// Stay in loop to receive message
