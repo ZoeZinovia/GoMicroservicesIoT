@@ -41,11 +41,11 @@ var messagePubHandler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Me
 	ledPin := rpio.Pin(12)
 	if strings.Contains(string(msg.Payload()), "Done") {
 		sessionStatus = false
-		ledPin.Output
+		ledPin.Output()
 		ledPin.Low()
 		end := time.Now()
 		timer := end.Sub(start)
-		resultString := "LED subsriber runtime = " + timer
+		resultString := fmt.Sprintf("LED subsriber runtime = %d", timer)
 		saveResultToFile("piResultsGo.txt", resultString)
 	} else {
 		json.Unmarshal([]byte(msg.Payload()), &led)
