@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"os"
@@ -20,14 +21,18 @@ var start = time.Now()
 var TOPIC_H string = "Humidity"
 var TOPIC_T string = "Temperature"
 
+type tempStruct struct {
+	Temperature float64
+	Unit        string
+}
+
 type humStruct struct {
 	Humidity float64
 	Unit     string
 }
 
-type tempStruct struct {
-	Temperature float64
-	Unit        string
+type reading interface {
+	structToJSON() []byte
 }
 
 var messagePubHandler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Message) {
@@ -35,29 +40,50 @@ var messagePubHandler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Me
 }
 
 func publish(client mqtt.Client) {
-	temperature, humidity, retried, err :=
+	temperatureReading, humidityReading, retried, err :=
 		dht.ReadDHTxxWithRetry(dht.DHT11, 4, false, 10)
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	fmt.Printf("Temperature = %v*C, Humidity = %v%% (retried %d times)\n",
-		temperature, humidity, retried)
-	// num := 10
-	// for i := 0; i < num; i++ {
-	// 	currentTemp := tempStruct{
-	// 		Temperature: 19,
-	// 		Unit:        "%",
-	// 	}
-	// 	jsonTemp, jsonErr := json.Marshal(currentTemp)
-	// 	if jsonErr != nil {
-	// 		log.Fatal(jsonErr)
-	// 	}
-	// 	token := client.Publish(TOPIC_T, 0, false, string(jsonTemp))
-	// 	token.Wait()
-	// 	time.Sleep(time.Second)
-	// }
+	num := 10
+	for i := 0; i < num; i++ {
+		currentTemperature := tempStruct{
+			Temperature: temperatureReading,
+			Unit:        "C",
+		}
+		currentHumidity := humStruct{
+			Humidity: humidityReading,
+			Unit:     "%",
+		}
+		jsonTemperature := currentTemperature.structToJSON()
+		jsonHumidity := currentHumidity.structToJSON()
+		token1 := client.Publish(TOPIC_T, 0, false, string(jsonTemperature))
+		token2 := client.Publish(TOPIC_H, 0, false, string(jsonHumidity))
+		token1.Wait()
+		token2.Wait()
+		time.Sleep(time.Second)
+	}
 	sessionStatus = false
+}
+
+func getJSON(r reading) []byte {
+	return r.structToJSON()
+}
+
+func (ts tempStruct) structToJSON() []byte {
+	jsonReading, jsonErr := json.Marshal(ts)
+	if jsonErr != nil {
+		log.Fatal(jsonErr)
+	}
+	return jsonReading
+}
+
+func (ts humStruct) structToJSON() []byte {
+	jsonReading, jsonErr := json.Marshal(ts)
+	if jsonErr != nil {
+		log.Fatal(jsonErr)
+	}
+	return jsonReading
 }
 
 var connectHandler mqtt.OnConnectHandler = func(client mqtt.Client) {
