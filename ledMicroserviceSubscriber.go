@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"os/signal"
 	"strings"
@@ -14,21 +15,42 @@ import (
 )
 
 var sessionStatus bool = true
+var counter int = 0
+var start = time.Now()
 
 type ledStruct struct {
 	LED_1 bool
 	GPIO  int
 }
 
+func saveResultToFile(filename string, result string) {
+	byteSlice := []byte(result)
+	someError := ioutil.WriteFile(filename, byteSlice, 0666)
+	if someError != nil {
+		fmt.Println(someError)
+		os.Exit(1)
+	}
+}
+
 var messagePubHandler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Message) {
+	counter++
+	if counter == 1 {
+		start = time.Now()
+	}
 	var led ledStruct
-	fmt.Printf("Received message: %T from topic: %s\n", msg.Payload(), msg.Topic())
+	ledPin := rpio.Pin(12)
 	if strings.Contains(string(msg.Payload()), "Done") {
 		sessionStatus = false
+		ledPin.Output
+		ledPin.Low()
+		end := time.Now()
+		timer := end.Sub(start)
+		resultString := "LED subsriber runtime = " + timer
+		saveResultToFile("piResultsGo.txt", resultString)
 	} else {
 		json.Unmarshal([]byte(msg.Payload()), &led)
 		fmt.Printf("%+v\n", led)
-		ledPin := rpio.Pin(led.GPIO)
+		ledPin = rpio.Pin(led.GPIO)
 		ledPin.Output()
 		if led.LED_1 {
 			ledPin.High()
@@ -43,7 +65,7 @@ var connectHandler mqtt.OnConnectHandler = func(client mqtt.Client) {
 }
 
 var connectLostHandler mqtt.ConnectionLostHandler = func(client mqtt.Client, err error) {
-	fmt.Printf("Connect lost: %v", err)
+	fmt.Printf("Connection lost: %v", err)
 }
 
 var ADDRESS string
@@ -85,22 +107,15 @@ func main() {
 		panic(token.Error())
 	}
 
+	// Subscribe to topic
 	sub(client)
-	// publish(client)
-	// topic := "led"
-	// token := client.Subscribe(topic, 0, nil)
-	// token.Wait()
-	// token := client.Publish(topic, 0, false, "Hello!")
-	// token.Wait()
 
-	// ledPin := rpio.Pin(12)
-	// ledPin.Output()
-	// ledPin.Low()
-	// time.Sleep(10 * time.Second)
-
+	// Stay in loop to receive message
 	for sessionStatus {
 		//Do nothing
 	}
+
+	// Disconnect
 	client.Disconnect(100)
 
 	fmt.Println("Ending run!")
@@ -110,15 +125,14 @@ func sub(client mqtt.Client) {
 	topic := "led"
 	token := client.Subscribe(topic, 1, nil)
 	token.Wait()
-	fmt.Printf("Subscribed to topic: %s", topic)
 }
 
-func publish(client mqtt.Client) {
-	num := 10
-	for i := 0; i < num; i++ {
-		text := fmt.Sprintf("Message %d", i)
-		token := client.Publish("led", 0, false, text)
-		token.Wait()
-		time.Sleep(time.Second)
-	}
-}
+// func publish(client mqtt.Client) {
+// 	num := 10
+// 	for i := 0; i < num; i++ {
+// 		text := fmt.Sprintf("Message %d", i)
+// 		token := client.Publish("led", 0, false, text)
+// 		token.Wait()
+// 		time.Sleep(time.Second)
+// 	}
+// }
