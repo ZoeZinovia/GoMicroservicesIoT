@@ -27,6 +27,7 @@ var messagePubHandler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Me
 		sessionStatus = false
 	} else {
 		json.Unmarshal([]byte(msg.Payload()), &led)
+		fmt.Println(led.LED_1)
 		ledPin := rpio.Pin(led.GPIO)
 		ledPin.Output()
 		if led.LED_1 {
@@ -102,7 +103,7 @@ func main() {
 	}
 	client.Disconnect(100)
 
-	fmt.Println("Subscribed to the topic!")
+	fmt.Println("Ending run!")
 }
 
 func sub(client mqtt.Client) {
