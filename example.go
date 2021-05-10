@@ -9,7 +9,7 @@ import (
 const GPIO = "GPIO4"
 
 func main() {
-	temperature, humidity, retried, err :=
+	_, _, _, err :=
 		dht.ReadDHTxxWithRetry(dht.DHT11, 4, false, 20)
 	if err != nil {
 		log.Fatal(err)
