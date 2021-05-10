@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"os/signal"
 	"syscall"
@@ -34,18 +35,14 @@ var messagePubHandler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Me
 }
 
 func publish(client mqtt.Client) {
-	sensorType := dht.DHT11
+	temperature, humidity, retried, err :=
+		dht.ReadDHTxxWithRetry(dht.DHT11, 4, false, 10)
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	pin := 4
-	temperature, humidity, retried, _ :=
-		dht.ReadDHTxxWithRetry(sensorType, pin, false, 10)
-	// if err != nil {
-	// 	lg.Fatal(err)
-	// }
-	// print temperature and humidity
-	fmt.Sprintf("Sensor = %v: Temperature = %v*C, Humidity = %v%% (retried %d times)",
-		sensorType, temperature, humidity, retried)
-
+	fmt.Printf("Temperature = %v*C, Humidity = %v%% (retried %d times)\n",
+		temperature, humidity, retried)
 	// num := 10
 	// for i := 0; i < num; i++ {
 	// 	currentTemp := tempStruct{
