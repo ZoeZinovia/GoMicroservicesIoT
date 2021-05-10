@@ -4,12 +4,18 @@
 #include <stdlib.h>
 #include <string.h>
 
+// Pi dht11 variables
+#define MAXTIMINGS	85
+#define DHTPIN		7
+
+int dht11_dat[5] = { 0, 0, 0, 0, 0 };
+
 // Reading of the dht11 is rather complex in C/C++. See this site that explains how readings are made: http://www.uugear.com/portfolio/dht11-humidity-temperature-sensor-module/
 int* read_dht11_dat()
 {
-    uint8_t laststate	= HIGH;
-    uint8_t counter		= 0;
-    uint8_t j		= 0, i;
+    u_int8_t laststate	= HIGH;
+    u_int8_t counter		= 0;
+    u_int8_t j		= 0, i;
 
     dht11_dat[0] = dht11_dat[1] = dht11_dat[2] = dht11_dat[3] = dht11_dat[4] = 0;
 
