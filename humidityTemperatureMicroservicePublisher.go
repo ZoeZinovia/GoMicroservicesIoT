@@ -72,6 +72,7 @@ func publish(client mqtt.Client) {
 		token.Wait()
 		time.Sleep(time.Second)
 	}
+	sessionStatus = false
 }
 
 var connectHandler mqtt.OnConnectHandler = func(client mqtt.Client) {
@@ -122,8 +123,7 @@ func main() {
 	}
 
 	// Subscribe to topic
-	token := client.Subscribe(TOPIC_T, 1, nil)
-	token.Wait()
+	publish(client)
 
 	// Stay in loop to receive message
 	for sessionStatus {
