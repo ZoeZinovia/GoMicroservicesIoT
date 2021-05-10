@@ -22,7 +22,7 @@ type ledStruct struct {
 
 var messagePubHandler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Message) {
 	var led ledStruct
-	fmt.Printf("Received message: %s from topic: %s\n", msg.Payload(), msg.Topic())
+	fmt.Printf("Received message: %T from topic: %s\n", msg.Payload(), msg.Topic())
 	if strings.Contains(msg.Payload(), "Done") {
 		sessionStatus = false
 	} else {
