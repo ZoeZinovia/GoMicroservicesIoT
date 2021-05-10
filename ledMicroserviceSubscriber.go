@@ -17,6 +17,7 @@ import (
 var sessionStatus bool = true
 var counter int = 0
 var start = time.Now()
+var TOPIC string = "LED"
 
 type ledStruct struct {
 	LED_1 bool
@@ -122,8 +123,7 @@ func main() {
 }
 
 func sub(client mqtt.Client) {
-	topic := "led"
-	token := client.Subscribe(topic, 1, nil)
+	token := client.Subscribe(TOPIC, 1, nil)
 	token.Wait()
 }
 
