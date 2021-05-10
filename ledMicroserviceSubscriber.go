@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"log"
 	"os"
 	"os/signal"
 	"strings"
@@ -25,11 +25,14 @@ type ledStruct struct {
 }
 
 func saveResultToFile(filename string, result string) {
+	file, errOpen := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if errOpen != nil {
+		log.Fatal(errOpen)
+	}
 	byteSlice := []byte(result)
-	someError := ioutil.WriteFile(filename, byteSlice, 0666)
-	if someError != nil {
-		fmt.Println(someError)
-		os.Exit(1)
+	_, errWrite := file.Write(byteSlice)
+	if errWrite != nil {
+		log.Fatal(errWrite)
 	}
 }
 
@@ -46,8 +49,7 @@ var messagePubHandler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Me
 		ledPin.Low()
 		end := time.Now()
 		duration := end.Sub(start).Seconds()
-		fmt.Println(duration)
-		resultString := fmt.Sprint("LED subsriber runtime =", duration)
+		resultString := fmt.Sprint("LED subsriber runtime = ", duration)
 		saveResultToFile("piResultsGo.txt", resultString)
 	} else {
 		json.Unmarshal([]byte(msg.Payload()), &led)
