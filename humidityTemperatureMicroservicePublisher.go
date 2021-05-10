@@ -22,8 +22,8 @@ var TOPIC_H string = "Humidity"
 var TOPIC_T string = "Temperature"
 
 type tempStruct struct {
-	Temperature float32
-	Unit        string
+	Temp float32
+	Unit string
 }
 
 type humStruct struct {
@@ -48,8 +48,8 @@ func publish(client mqtt.Client) {
 	num := 10
 	for i := 0; i < num; i++ {
 		currentTemperature := tempStruct{
-			Temperature: temperatureReading,
-			Unit:        "C",
+			Temp: temperatureReading,
+			Unit: "C",
 		}
 		currentHumidity := humStruct{
 			Humidity: humidityReading,
