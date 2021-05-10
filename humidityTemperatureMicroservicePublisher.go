@@ -1,13 +1,13 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
-	"log"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
+
+	"github.com/d2r2/go-dht"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 	rpio "github.com/stianeikeland/go-rpio"
@@ -29,49 +29,37 @@ type tempStruct struct {
 	Unit        string
 }
 
-// var messagePubHandler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Message) {
-// 	counter++
-// 	if counter == 1 {
-// 		start = time.Now()
-// 	}
-// 	var led ledStruct
-// 	ledPin := rpio.Pin(12)
-// 	if strings.Contains(string(msg.Payload()), "Done") {
-// 		sessionStatus = false
-// 		ledPin.Output()
-// 		ledPin.Low()
-// 		end := time.Now()
-// 		duration := end.Sub(start).Seconds()
-// 		resultString := fmt.Sprint("LED subsriber runtime = ", duration, "\n")
-// 		saveResultToFile("piResultsGo.txt", resultString)
-// 		fmt.Println("LED subscriber runtime =", duration)
-// 	} else {
-// 		json.Unmarshal([]byte(msg.Payload()), &led)
-// 		ledPin = rpio.Pin(led.GPIO)
-// 		ledPin.Output()
-// 		if led.LED_1 {
-// 			ledPin.High()
-// 		} else {
-// 			ledPin.Low()
-// 		}
-// 	}
-// }
+var messagePubHandler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Message) {
+	fmt.Println("Message received")
+}
 
 func publish(client mqtt.Client) {
-	num := 10
-	for i := 0; i < num; i++ {
-		currentTemp := tempStruct{
-			Temperature: 19,
-			Unit:        "%",
-		}
-		jsonTemp, jsonErr := json.Marshal(currentTemp)
-		if jsonErr != nil {
-			log.Fatal(jsonErr)
-		}
-		token := client.Publish(TOPIC_T, 0, false, string(jsonTemp))
-		token.Wait()
-		time.Sleep(time.Second)
-	}
+	sensorType := dht.DHT11
+
+	pin := 1
+	temperature, humidity, retried, _ :=
+		dht.ReadDHTxxWithRetry(sensorType, pin, false, 10)
+	// if err != nil {
+	// 	lg.Fatal(err)
+	// }
+	// print temperature and humidity
+	fmt.Sprintf("Sensor = %v: Temperature = %v*C, Humidity = %v%% (retried %d times)",
+		sensorType, temperature, humidity, retried)
+
+	// num := 10
+	// for i := 0; i < num; i++ {
+	// 	currentTemp := tempStruct{
+	// 		Temperature: 19,
+	// 		Unit:        "%",
+	// 	}
+	// 	jsonTemp, jsonErr := json.Marshal(currentTemp)
+	// 	if jsonErr != nil {
+	// 		log.Fatal(jsonErr)
+	// 	}
+	// 	token := client.Publish(TOPIC_T, 0, false, string(jsonTemp))
+	// 	token.Wait()
+	// 	time.Sleep(time.Second)
+	// }
 	sessionStatus = false
 }
 
@@ -114,7 +102,7 @@ func main() {
 	opts := mqtt.NewClientOptions()
 	opts.AddBroker(fmt.Sprintf("tcp://%s:%d", ADDRESS, PORT))
 	opts.SetClientID("go_mqtt_client")
-	// opts.SetDefaultPublishHandler(messagePubHandler)
+	opts.SetDefaultPublishHandler(messagePubHandler)
 	opts.OnConnect = connectHandler
 	opts.OnConnectionLost = connectLostHandler
 	client := mqtt.NewClient(opts)
