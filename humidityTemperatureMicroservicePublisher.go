@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"os"
 	"os/signal"
 	"syscall"
@@ -63,7 +64,10 @@ func publish(client mqtt.Client) {
 			Temperature: 19,
 			Unit:        "%",
 		}
-		jsonTemp := json.Marshal(currentTemp)
+		jsonTemp, jsonErr := json.Marshal(currentTemp)
+		if jsonErr != nil {
+			log.Fatal(jsonErr)
+		}
 		token := client.Publish(TOPIC_T, 0, false, string(jsonTemp))
 		token.Wait()
 		time.Sleep(time.Second)
