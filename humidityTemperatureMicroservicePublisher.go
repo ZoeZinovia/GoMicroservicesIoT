@@ -9,8 +9,6 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/d2r2/go-dht"
-
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 )
 
@@ -41,17 +39,17 @@ var messagePubHandler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Me
 }
 
 func publish(client mqtt.Client) {
-	temperatureReading, humidityReading, _, err :=
-		dht.ReadDHTxxWithRetry(dht.DHT11, 4, false, 10)
+	// temperatureReading, humidityReading, _, err :=
+	// 	dht.ReadDHTxxWithRetry(dht.DHT11, 4, false, 10)
 	if err != nil {
 		log.Fatal(err)
 	}
 	currentTemperature := tempStruct{
-		Temp: temperatureReading,
+		Temp: 12,
 		Unit: "C",
 	}
 	currentHumidity := humStruct{
-		Humidity: humidityReading,
+		Humidity: 12,
 		Unit:     "%",
 	}
 	jsonTemperature := currentTemperature.structToJSON()
@@ -125,8 +123,8 @@ func main() {
 	// Creat MQTT client
 	opts := mqtt.NewClientOptions()
 	opts.AddBroker(fmt.Sprintf("tcp://%s:%d", ADDRESS, PORT))
-	opts.SetClientID("go_mqtt_client")
-	opts.SetDefaultPublishHandler(messagePubHandler)
+	// opts.SetClientID("go_mqtt_client")
+	// opts.SetDefaultPublishHandler(messagePubHandler)
 	opts.OnConnect = connectHandler
 	opts.OnConnectionLost = connectLostHandler
 	client := mqtt.NewClient(opts)
@@ -134,8 +132,8 @@ func main() {
 		panic(token.Error())
 	}
 
-	// Subscribe to topic
-	for i := 0; i < 100; i++ {
+	// Publish to topic
+	for i := 0; i < 10; i++ {
 		publish(client)
 	}
 
