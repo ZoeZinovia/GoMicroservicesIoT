@@ -3,10 +3,8 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"os"
 	"os/signal"
-	"strings"
 	"syscall"
 	"time"
 
@@ -17,50 +15,58 @@ import (
 var sessionStatus bool = true
 var counter int = 0
 var start = time.Now()
-var TOPIC string = "LED"
+var TOPIC_H string = "Humidity"
+var TOPIC_T string = "Temperature"
 
-type ledStruct struct {
-	LED_1 bool
-	GPIO  int
+type humStruct struct {
+	Humidity float64
+	Unit     string
 }
 
-func saveResultToFile(filename string, result string) {
-	file, errOpen := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-	if errOpen != nil {
-		log.Fatal(errOpen)
-	}
-	byteSlice := []byte(result)
-	_, errWrite := file.Write(byteSlice)
-	if errWrite != nil {
-		log.Fatal(errWrite)
-	}
+type tempStruct struct {
+	Temperature float64
+	Unit        string
 }
 
-var messagePubHandler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Message) {
-	counter++
-	if counter == 1 {
-		start = time.Now()
-	}
-	var led ledStruct
-	ledPin := rpio.Pin(12)
-	if strings.Contains(string(msg.Payload()), "Done") {
-		sessionStatus = false
-		ledPin.Output()
-		ledPin.Low()
-		end := time.Now()
-		duration := end.Sub(start).Seconds()
-		resultString := fmt.Sprint("LED subsriber runtime = ", duration, "\n")
-		saveResultToFile("piResultsGo.txt", resultString)
-		fmt.Println("LED subscriber runtime =", duration)
-	} else {
-		json.Unmarshal([]byte(msg.Payload()), &led)
-		ledPin = rpio.Pin(led.GPIO)
-		ledPin.Output()
-		if led.LED_1 {
-			ledPin.High()
-		} else {
-			ledPin.Low()
+// var messagePubHandler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Message) {
+// 	counter++
+// 	if counter == 1 {
+// 		start = time.Now()
+// 	}
+// 	var led ledStruct
+// 	ledPin := rpio.Pin(12)
+// 	if strings.Contains(string(msg.Payload()), "Done") {
+// 		sessionStatus = false
+// 		ledPin.Output()
+// 		ledPin.Low()
+// 		end := time.Now()
+// 		duration := end.Sub(start).Seconds()
+// 		resultString := fmt.Sprint("LED subsriber runtime = ", duration, "\n")
+// 		saveResultToFile("piResultsGo.txt", resultString)
+// 		fmt.Println("LED subscriber runtime =", duration)
+// 	} else {
+// 		json.Unmarshal([]byte(msg.Payload()), &led)
+// 		ledPin = rpio.Pin(led.GPIO)
+// 		ledPin.Output()
+// 		if led.LED_1 {
+// 			ledPin.High()
+// 		} else {
+// 			ledPin.Low()
+// 		}
+// 	}
+// }
+
+func publish(client mqtt.Client) {
+	num := 10
+	for i := 0; i < num; i++ {
+		currentTemp := tempStruct{
+			Temperature: 19,
+			Unit:        "%",
 		}
+		jsonTemp := json.Marshal(currentTemp)
+		token := client.Publish(TOPIC_T, 0, false, string(jsonTemp))
+		token.Wait()
+		time.Sleep(time.Second)
 	}
 }
 
@@ -125,13 +131,3 @@ func main() {
 
 	fmt.Println("Ending run!")
 }
-
-// func publish(client mqtt.Client) {
-// 	num := 10
-// 	for i := 0; i < num; i++ {
-// 		text := fmt.Sprintf("Message %d", i)
-// 		token := client.Publish("led", 0, false, text)
-// 		token.Wait()
-// 		time.Sleep(time.Second)
-// 	}
-// }
