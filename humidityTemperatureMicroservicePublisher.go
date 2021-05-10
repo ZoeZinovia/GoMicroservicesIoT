@@ -22,12 +22,12 @@ var TOPIC_H string = "Humidity"
 var TOPIC_T string = "Temperature"
 
 type tempStruct struct {
-	Temperature float64
+	Temperature float32
 	Unit        string
 }
 
 type humStruct struct {
-	Humidity float64
+	Humidity float32
 	Unit     string
 }
 
