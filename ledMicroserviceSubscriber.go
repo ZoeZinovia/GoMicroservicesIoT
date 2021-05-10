@@ -1,9 +1,11 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 	"time"
 
@@ -11,8 +13,28 @@ import (
 	rpio "github.com/stianeikeland/go-rpio"
 )
 
+var sessionStatus bool = true
+
+type ledStruct struct {
+	LED_1 bool
+	GPIO  int
+}
+
 var messagePubHandler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Message) {
+	var led ledStruct
 	fmt.Printf("Received message: %s from topic: %s\n", msg.Payload(), msg.Topic())
+	if strings.Contains(msg.Payload(), "Done") {
+		sessionStatus = false
+	} else {
+		json.Unmarshal([]byte(msg.Payload()), &led)
+		ledPin := rpio.Pin(led.GPIO)
+		ledPin.Output()
+		if led.LED_1 {
+			ledPin.High()
+		} else {
+			ledPin.Low()
+		}
+	}
 }
 
 var connectHandler mqtt.OnConnectHandler = func(client mqtt.Client) {
@@ -24,8 +46,11 @@ var connectLostHandler mqtt.ConnectionLostHandler = func(client mqtt.Client, err
 }
 
 var ADDRESS string
+var PORT = 1883
 
 func main() {
+
+	// Save the IP address
 	if len(os.Args) <= 1 {
 		fmt.Println("IP address must be provided as a command line argument")
 		os.Exit(1)
@@ -33,11 +58,13 @@ func main() {
 	ADDRESS = os.Args[1]
 	fmt.Println(ADDRESS)
 
+	// Check that RPIO opened correctly
 	if err := rpio.Open(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
 
+	// End program with ctrl-C
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
 	go func() {
@@ -45,13 +72,10 @@ func main() {
 		os.Exit(0)
 	}()
 
-	// var broker =
-	// var port = 1883
+	// Creat MQTT client
 	opts := mqtt.NewClientOptions()
-	opts.AddBroker(fmt.Sprintf("tcp://10.35.0.229:1883"))
+	opts.AddBroker(fmt.Sprintf("tcp://%s:%d", ADDRESS, PORT))
 	opts.SetClientID("go_mqtt_client")
-	// opts.SetUsername("emqx")
-	// opts.SetPassword("public")
 	opts.SetDefaultPublishHandler(messagePubHandler)
 	opts.OnConnect = connectHandler
 	opts.OnConnectionLost = connectLostHandler
@@ -73,7 +97,7 @@ func main() {
 	// ledPin.Low()
 	// time.Sleep(10 * time.Second)
 
-	for {
+	for sessionStatus {
 		//Do nothing
 	}
 	client.Disconnect(100)
