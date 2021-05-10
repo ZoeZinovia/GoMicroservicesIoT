@@ -36,7 +36,7 @@ var messagePubHandler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Me
 func publish(client mqtt.Client) {
 	sensorType := dht.DHT11
 
-	pin := 1
+	pin := 4
 	temperature, humidity, retried, _ :=
 		dht.ReadDHTxxWithRetry(sensorType, pin, false, 10)
 	// if err != nil {
