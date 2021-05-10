@@ -56,6 +56,7 @@ func publish(client mqtt.Client) {
 			Unit:     "%",
 		}
 		jsonTemperature := currentTemperature.structToJSON()
+		fmt.Println(string(jsonTemperature))
 		jsonHumidity := currentHumidity.structToJSON()
 		token1 := client.Publish(TOPIC_T, 0, false, string(jsonTemperature))
 		token2 := client.Publish(TOPIC_H, 0, false, string(jsonHumidity))
