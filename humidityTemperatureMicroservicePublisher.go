@@ -12,7 +12,6 @@ import (
 	"github.com/d2r2/go-dht"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
-	rpio "github.com/stianeikeland/go-rpio"
 )
 
 var sessionStatus bool = true
@@ -20,6 +19,8 @@ var counter int = 0
 var start = time.Now()
 var TOPIC_H string = "Humidity"
 var TOPIC_T string = "Temperature"
+var ADDRESS string
+var PORT = 1883
 
 type tempStruct struct {
 	Temp float32
@@ -45,26 +46,22 @@ func publish(client mqtt.Client) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	num := 10
-	for i := 0; i < num; i++ {
-		currentTemperature := tempStruct{
-			Temp: temperatureReading,
-			Unit: "C",
-		}
-		currentHumidity := humStruct{
-			Humidity: humidityReading,
-			Unit:     "%",
-		}
-		jsonTemperature := currentTemperature.structToJSON()
-		fmt.Println(string(jsonTemperature))
-		jsonHumidity := currentHumidity.structToJSON()
-		token1 := client.Publish(TOPIC_T, 0, false, string(jsonTemperature))
-		token2 := client.Publish(TOPIC_H, 0, false, string(jsonHumidity))
-		token1.Wait()
-		token2.Wait()
-		time.Sleep(time.Second)
+	currentTemperature := tempStruct{
+		Temp: temperatureReading,
+		Unit: "C",
 	}
-	sessionStatus = false
+	currentHumidity := humStruct{
+		Humidity: humidityReading,
+		Unit:     "%",
+	}
+	jsonTemperature := currentTemperature.structToJSON()
+	fmt.Println(string(jsonTemperature))
+	jsonHumidity := currentHumidity.structToJSON()
+	client.Publish(TOPIC_T, 0, false, string(jsonTemperature))
+	client.Publish(TOPIC_H, 0, false, string(jsonHumidity))
+	// token1.Wait()
+	// token2.Wait()
+	// time.Sleep(time.Second)
 }
 
 func getJSON(r reading) []byte {
@@ -95,8 +92,17 @@ var connectLostHandler mqtt.ConnectionLostHandler = func(client mqtt.Client, err
 	fmt.Printf("Connection lost: %v", err)
 }
 
-var ADDRESS string
-var PORT = 1883
+func saveResultToFile(filename string, result string) {
+	file, errOpen := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if errOpen != nil {
+		log.Fatal(errOpen)
+	}
+	byteSlice := []byte(result)
+	_, errWrite := file.Write(byteSlice)
+	if errWrite != nil {
+		log.Fatal(errWrite)
+	}
+}
 
 func main() {
 
@@ -107,12 +113,6 @@ func main() {
 	}
 	ADDRESS = os.Args[1]
 	fmt.Println(ADDRESS)
-
-	// Check that RPIO opened correctly
-	if err := rpio.Open(); err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
 
 	// End program with ctrl-C
 	c := make(chan os.Signal, 1)
@@ -135,15 +135,15 @@ func main() {
 	}
 
 	// Subscribe to topic
-	publish(client)
-
-	// Stay in loop to receive message
-	for sessionStatus {
-		//Do nothing
+	for i := 0; i < 100; i++ {
+		publish(client)
 	}
 
 	// Disconnect
 	client.Disconnect(100)
-
-	fmt.Println("Ending run!")
+	end := time.Now()
+	duration := end.Sub(start).Seconds()
+	resultString := fmt.Sprint("Humidity and temperature runtime = ", duration, "\n")
+	saveResultToFile("piResultsGo.txt", resultString)
+	fmt.Println("Humidity and temperature runtime =", duration)
 }
