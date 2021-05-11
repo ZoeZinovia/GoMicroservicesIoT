@@ -58,7 +58,7 @@ package main
 //         return dht11_dat[0]; // If all ok, return pointer to the data array
 //     } else  {
 //         dht11_dat[0] = 255;
-//         return dht11_dat; //If there was an error, set first array element to -1 as flag to main function
+//         return dht11_dat[0]; //If there was an error, set first array element to -1 as flag to main function
 //     }
 // }
 import "C"
