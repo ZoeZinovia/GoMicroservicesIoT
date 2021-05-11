@@ -5,7 +5,7 @@ package main
 // #include <stdio.h>
 // #include <stdlib.h>
 // #include <stdint.h>
-// #define MAX_TIMINGS	86
+// #define MAX_TIMINGS	85
 // #define DHT_PIN		7	/* GPIO-4 */
 // int data[5] = { 0, 0, 0, 0, 0 };
 // void read_dht_data()
@@ -20,6 +20,8 @@ package main
 // 	digitalWrite( DHT_PIN, LOW );
 // 	delay( 18 );
 // 	/* prepare to read the pin */
+// 	digitalWrite( DHT_PIN, HIGH);
+//  delayMicroseconds( 40 );
 // 	pinMode( DHT_PIN, INPUT );
 // 	/* detect change and read data */
 // 	for ( i = 0; i < MAX_TIMINGS; i++ )
