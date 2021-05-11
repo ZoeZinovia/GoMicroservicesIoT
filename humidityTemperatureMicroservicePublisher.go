@@ -70,7 +70,7 @@ package main
 // 		   		printf("Error opening file!\n");
 // 		   		exit(1);
 // 		   }
-//		   fprintf(f, "Error :(");
+//		   fprintf(f, "%s", "Error :(");
 //         dht11_dat[0] = 255;
 //         return dht11_dat; //If there was an error, set first array element to -1 as flag to main function
 //     }
