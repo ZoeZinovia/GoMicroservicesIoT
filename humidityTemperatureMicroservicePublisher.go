@@ -13,7 +13,6 @@ package main
 // // Reading of the dht11 is rather complex in C/C++. See this site that explains how readings are made: http://www.uugear.com/portfolio/dht11-humidity-temperature-sensor-module/
 // int* read_dht11_dat()
 // {
-//     printf("DHT PIN: %d", DHTPIN);
 //	   wiringPiSetup();
 //     u_int8_t laststate	= HIGH;
 //     u_int8_t counter		= 0;
