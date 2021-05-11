@@ -10,6 +10,7 @@ package main
 // int data[5] = { 0, 0, 0, 0, 0 };
 // void read_dht_data()
 // {
+//	wiringPiSetup()
 //	FILE *file;
 // 	uint8_t laststate	= HIGH;
 // 	uint8_t counter		= 0;
@@ -124,7 +125,6 @@ func publish(client mqtt.Client) {
 	// 	log.Fatal(err)
 	// }
 
-	wiringPiSetup()
 	C.read_dht_data()
 
 	// fmt.Printf("%T", returnedArray)
