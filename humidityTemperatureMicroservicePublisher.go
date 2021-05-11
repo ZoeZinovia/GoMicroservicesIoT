@@ -57,7 +57,7 @@ package main
 // 	   				exit(1);
 // 	   			}
 //	   			fprintf(f, "reached j loop, %d\n", j);
-//	   			fprintf(f, "dht value: , %d, %d, %d, %d, %d\n", dht11_dat[0],dht11_dat[0],dht11_dat[0],dht11_dat[],dht11_dat[4]);
+//	   			fprintf(f, "dht value: , %d, %d, %d, %d, %d\n", dht11_dat[0],dht11_dat[0],dht11_dat[],dht11_dat[3],dht11_dat[4]);
 //	   			fprintf(f, "dht array: , %d\n", dht11_dat[j/8]);
 //     			fclose(f);
 //         }
