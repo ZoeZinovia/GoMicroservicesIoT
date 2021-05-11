@@ -70,7 +70,6 @@ package main
 // 		}
 // 		float fT = c * 1.8f + 32;
 // 	}else  {
-// 		fprintf(file, "%s", "Data not good, skip\n" );
 // 	}
 // }
 import "C"
