@@ -10,7 +10,7 @@ package main
 // #define DHTPIN		4
 // int dht11_dat[5] = { 0, 0, 0, 0, 0 };
 // // Reading of the dht11 is rather complex in C/C++. See this site that explains how readings are made: http://www.uugear.com/portfolio/dht11-humidity-temperature-sensor-module/
-// int* read_dht11_dat()
+// int read_dht11_dat()
 // {
 //	   wiringPiSetup();
 //     u_int8_t laststate	= HIGH;
@@ -55,7 +55,7 @@ package main
 //     // Check that 40 bits (8bit x 5 ) were read + verify checksum in the last byte
 //     if ( (j >= 40) && (dht11_dat[4] == ( (dht11_dat[0] + dht11_dat[1] + dht11_dat[2] + dht11_dat[3]) & 0xFF) ) )
 //     {
-//         return dht11_dat; // If all ok, return pointer to the data array
+//         return dht11_dat[0]; // If all ok, return pointer to the data array
 //     } else  {
 //         dht11_dat[0] = 255;
 //         return dht11_dat; //If there was an error, set first array element to -1 as flag to main function
