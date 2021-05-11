@@ -70,6 +70,13 @@ package main
 // 		}
 // 		float fT = c * 1.8f + 32;
 // 	}else  {
+//				FILE *f = fopen("comment.txt", "a");
+// 	   			if (f == NULL)
+// 	  			{
+// 	   				printf("Error opening file!\n");
+// 	   				exit(1);
+// 	   			}
+//	   			fprintf(f, "%s", "error :(");
 // 	}
 // }
 import "C"
