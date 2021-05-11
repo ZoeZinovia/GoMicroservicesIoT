@@ -10,7 +10,7 @@ package main
 // int data[5] = { 0, 0, 0, 0, 0 };
 // void read_dht_data()
 // {
-//	FILE *f = fopen("comment.txt", "a");
+//	FILE *file;
 // 	uint8_t laststate	= HIGH;
 // 	uint8_t counter		= 0;
 // 	uint8_t j			= 0, i;
@@ -68,12 +68,13 @@ package main
 // 		{
 // 			c = -c;
 // 		}
-// 		float f = c * 1.8f + 32;
-// 		fprintf(f, "Humidity = %.1f %% Temperature = %.1f *C (%.1f *F)\n", h, c, f );
-//		fclose(f);
+// 		float fT = c * 1.8f + 32;
+//		file = fopen("comment.txt", "a");
+// 		fprintf(file, "Humidity = %.1f %% Temperature = %.1f *C (%.1f *F)\n", h, c, fT );
+//		fclose(file);
 // 	}else  {
-// 		fprintf(f, "%s", "Data not good, skip\n" );
-//		fclose(f);
+// 		fprintf(file, "%s", "Data not good, skip\n" );
+//		fclose(file);
 // 	}
 // }
 import "C"
