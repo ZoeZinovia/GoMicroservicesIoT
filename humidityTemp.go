@@ -11,7 +11,6 @@ package main
 // void read_dht_data()
 // {
 //	wiringPiSetup();
-//	FILE *file;
 // 	uint8_t laststate	= HIGH;
 // 	uint8_t counter		= 0;
 // 	uint8_t j			= 0, i;
@@ -70,12 +69,8 @@ package main
 // 			c = -c;
 // 		}
 // 		float fT = c * 1.8f + 32;
-//		file = fopen("comment.txt", "a");
-// 		fprintf(file, "Humidity = %.1f %% Temperature = %.1f *C (%.1f *F)\n", h, c, fT );
-//		fclose(file);
 // 	}else  {
 // 		fprintf(file, "%s", "Data not good, skip\n" );
-//		fclose(file);
 // 	}
 // }
 import "C"
