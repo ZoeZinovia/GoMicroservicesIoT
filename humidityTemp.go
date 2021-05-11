@@ -30,17 +30,7 @@ package main
 // 			counter++;
 // 			delayMicroseconds( 1 );
 // 			if ( counter == 255 )
-// 			{
-//			FILE *f = fopen("comment.txt", "a");
-// 	   		if (f == NULL)
-// 	  		{
-// 	   			printf("Error opening file!\n");
-// 	   			exit(1);
-// 	   		}
-//	   		fprintf(f, "%s", "breaking : 1\n");
-//     		fclose(f);
 // 				break;
-// 			}
 // 		}
 // 		laststate = digitalRead( DHT_PIN );
 //		FILE *f = fopen("comment.txt", "a");
@@ -50,16 +40,9 @@ package main
 // 	   		exit(1);
 // 	   	}
 //	   	fprintf(f, "last state: %d\n", laststate);
+//	   	fprintf(f, "counter: %d\n", counter);
 //     	fclose(f);
 // 		if ( counter == 255 ){
-//			FILE *f = fopen("comment.txt", "a");
-// 	   		if (f == NULL)
-// 	  		{
-// 	   			printf("Error opening file!\n");
-// 	   			exit(1);
-// 	   		}
-//	   		fprintf(f, "%s", "breaking : 2\n");
-//     		fclose(f);
 // 			break;
 //		}
 // 		/* ignore first 3 transitions */
@@ -94,16 +77,25 @@ package main
 // 			c = -c;
 // 		}
 // 		float fT = c * 1.8f + 32;
+//		FILE *f = fopen("comment.txt", "a");
+// 	   	if (f == NULL)
+// 	  	{
+// 	   		printf("Error opening file!\n");
+// 	   		exit(1);
+// 	   	}
+//	 	fprintf(f, "%s", "worked :)\n");
+//	   	fprintf(f, "%d, %d, %d, %d, %d\n", data[0], data[1], data[2], data[3], data[4]);
+//     	fclose(f);
 // 	}else  {
-//				FILE *f = fopen("comment.txt", "a");
-// 	   			if (f == NULL)
-// 	  			{
-// 	   				printf("Error opening file!\n");
-// 	   				exit(1);
-// 	   			}
-//	   			fprintf(f, "%s", "error :(\n");
-//	   			fprintf(f, "%d, %d, %d, %d, %d\n", data[0], data[1], data[2], data[3], data[4]);
-//     			fclose(f);
+//		FILE *f = fopen("comment.txt", "a");
+// 	   	if (f == NULL)
+// 	  	{
+// 	   		printf("Error opening file!\n");
+// 	   		exit(1);
+// 	   	}
+//	   	fprintf(f, "%s", "error :(\n");
+//	   	fprintf(f, "%d, %d, %d, %d, %d\n", data[0], data[1], data[2], data[3], data[4]);
+//     	fclose(f);
 // 	}
 // }
 import "C"
