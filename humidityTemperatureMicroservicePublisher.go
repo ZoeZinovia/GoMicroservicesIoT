@@ -20,20 +20,12 @@ package main
 //     // pull pin down for 18 milliseconds. This is called “Start Signal” and it is to ensure DHT11 has detected the signal from MCU.
 //     pinMode(7, OUTPUT );
 //     digitalWrite(7, 0 );
-//	   FILE *f = fopen("comment.txt", "a");
-// 	   if (f == NULL)
-// 	   {
-// 	   		printf("Error opening file!\n");
-// 	   		exit(1);
-// 	   }
-//	   fprintf(f, "%s", "Managed to pull it down");
-//     fclose(f);
 //     delay( 18 );
 //     // Then MCU will pull up DATA pin for 40us to wait for DHT11’s response.
 //     digitalWrite( 7, 1 );
 //     delayMicroseconds( 40 );
 //     // Prepare to read the pin
-//     pinMode( DHTPIN, INPUT );
+//     pinMode( 7, INPUT );
 //     // Detect change and read data
 //     for ( i = 0; i < MAXTIMINGS; i++ )
 //     {
@@ -47,7 +39,7 @@ package main
 //                 break;
 //             }
 //         }
-//         laststate = digitalRead( DHTPIN );
+//         laststate = digitalRead( 7 );
 //         if ( counter == 255 )
 //             break;
 //         // Ignore first 3 transitions
@@ -67,7 +59,7 @@ package main
 // 	   		printf("Error opening file!\n");
 // 	   		exit(1);
 // 	   }
-//	   fprintf(f, "%s", "Managed to pull it up");
+//	   fprintf(f, "%d\n", j);
 //     fclose(f);
 //     if ( (j >= 40) && (dht11_dat[4] == ( (dht11_dat[0] + dht11_dat[1] + dht11_dat[2] + dht11_dat[3]) & 0xFF) ) )
 //     {
