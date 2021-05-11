@@ -10,7 +10,7 @@ package main
 // #define DHTPIN		4
 // int dht11_dat[5] = { 0, 0, 0, 0, 0 };
 // // Reading of the dht11 is rather complex in C/C++. See this site that explains how readings are made: http://www.uugear.com/portfolio/dht11-humidity-temperature-sensor-module/
-// int read_dht11_dat()
+// int* read_dht11_dat()
 // {
 //	   wiringPiSetup();
 //     u_int8_t laststate	= HIGH;
@@ -55,10 +55,10 @@ package main
 //     // Check that 40 bits (8bit x 5 ) were read + verify checksum in the last byte
 //     if ( (j >= 40) && (dht11_dat[4] == ( (dht11_dat[0] + dht11_dat[1] + dht11_dat[2] + dht11_dat[3]) & 0xFF) ) )
 //     {
-//         return dht11_dat[0]; // If all ok, return pointer to the data array
+//         return dht11_dat; // If all ok, return pointer to the data array
 //     } else  {
-//         dht11_dat[0] = 254;
-//         return dht11_dat[0]; //If there was an error, set first array element to -1 as flag to main function
+//         dht11_dat[0] = 255;
+//         return dht11_dat; //If there was an error, set first array element to -1 as flag to main function
 //     }
 // }
 import "C"
@@ -71,6 +71,7 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
+	"unsafe"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 )
@@ -108,27 +109,25 @@ func publish(client mqtt.Client) {
 	// 	log.Fatal(err)
 	// }
 
-	value := C.read_dht11_dat()
-	fmt.Println(value)
-	// returnedArray := C.read_dht11_dat()
-	// byteSlice := C.GoBytes(unsafe.Pointer(&returnedArray), 5)
+	returnedArray := C.read_dht11_dat()
+	byteSlice := C.GoBytes(unsafe.Pointer(&returnedArray), 5)
 
-	// counter := 0
-	// for (byteSlice[0] == 255) && (counter < 5) {
-	// 	returnedArray := C.read_dht11_dat()
-	// 	byteSlice = C.GoBytes(unsafe.Pointer(&returnedArray), 5)
-	// 	counter++
-	// }
-	// if counter == 5 {
-	// 	fmt.Println("Problem encountered with DHT. Please check.")
-	// 	os.Exit(0)
-	// }
-	// mySlice := byteSliceToIntSlice(byteSlice)
+	counter := 0
+	for (byteSlice[0] == 255) && (counter < 5) {
+		returnedArray := C.read_dht11_dat()
+		byteSlice = C.GoBytes(unsafe.Pointer(&returnedArray), 5)
+		counter++
+	}
+	if counter == 5 {
+		fmt.Println("Problem encountered with DHT. Please check.")
+		os.Exit(0)
+	}
+	mySlice := byteSliceToIntSlice(byteSlice)
 
-	// temperatureReading := mySlice[0] + (mySlice[1] / 10)
-	// humidityReading := mySlice[2] + (mySlice[3] / 10)
+	temperatureReading := mySlice[0] + (mySlice[1] / 10)
+	humidityReading := mySlice[2] + (mySlice[3] / 10)
 
-	// fmt.Println("temperature:", temperatureReading, ", humidity:", humidityReading)
+	fmt.Println("temperature:", temperatureReading, ", humidity:", humidityReading)
 
 	// currentTemperature := tempStruct{
 	// 	Temp: temperatureReading,
