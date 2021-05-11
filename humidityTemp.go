@@ -33,15 +33,6 @@ package main
 // 				break;
 // 		}
 // 		laststate = digitalRead( DHT_PIN );
-//		FILE *f = fopen("comment.txt", "a");
-// 	   	if (f == NULL)
-// 	  	{
-// 	   		printf("Error opening file!\n");
-// 	   		exit(1);
-// 	   	}
-//	   	fprintf(f, "last state: %d\n", laststate);
-//	   	fprintf(f, "counter: %d\n", counter);
-//     	fclose(f);
 // 		if ( counter == 255 ){
 // 			break;
 //		}
@@ -87,15 +78,6 @@ package main
 //	   	fprintf(f, "%d, %d, %d, %d, %d\n", data[0], data[1], data[2], data[3], data[4]);
 //     	fclose(f);
 // 	}else  {
-//		FILE *f = fopen("comment.txt", "a");
-// 	   	if (f == NULL)
-// 	  	{
-// 	   		printf("Error opening file!\n");
-// 	   		exit(1);
-// 	   	}
-//	   	fprintf(f, "%s", "error :(\n");
-//	   	fprintf(f, "%d, %d, %d, %d, %d\n", data[0], data[1], data[2], data[3], data[4]);
-//     	fclose(f);
 // 	}
 // }
 import "C"
