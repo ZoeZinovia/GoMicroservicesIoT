@@ -5,7 +5,7 @@ package main
 // #include <stdio.h>
 // #include <stdlib.h>
 // #include <stdint.h>
-// #define MAX_TIMINGS	85
+// #define MAX_TIMINGS	86
 // #define DHT_PIN		7	/* GPIO-4 */
 // int data[5] = { 0, 0, 0, 0, 0 };
 // void read_dht_data()
