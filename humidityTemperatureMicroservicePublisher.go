@@ -126,10 +126,11 @@ func publish(client mqtt.Client) {
 	}
 	mySlice := byteSliceToIntSlice(byteSlice)
 
-	temperatureReading := mySlice[0] + (mySlice[1] / 10)
-	humidityReading := mySlice[2] + (mySlice[3] / 10)
+	fmt.Println(mySlice[0], mySlice[1], mySlice[2], mySlice[3], mySlice[4])
+	// temperatureReading := mySlice[0] + (mySlice[1] / 10)
+	// humidityReading := mySlice[2] + (mySlice[3] / 10)
 
-	fmt.Println("temperature:", temperatureReading, ", humidity:", humidityReading)
+	// fmt.Println("temperature:", temperatureReading, ", humidity:", humidityReading)
 
 	// currentTemperature := tempStruct{
 	// 	Temp: temperatureReading,
