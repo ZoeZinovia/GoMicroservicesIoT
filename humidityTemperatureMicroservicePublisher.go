@@ -51,7 +51,7 @@ func publish(client mqtt.Client) {
 	// 	log.Fatal(err)
 	// }
 
-	dataReadings := C.readDht11()
+	dataReadings := C.read_dht11_dat()
 	fmt.Printf("%T\n", dataReadings)
 
 	// currentTemperature := tempStruct{
