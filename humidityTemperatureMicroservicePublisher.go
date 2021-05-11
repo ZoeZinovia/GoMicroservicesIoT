@@ -45,6 +45,14 @@ package main
 //         // Ignore first 3 transitions
 //         if ( (i >= 4) && (i % 2 == 0) )
 //         {
+//			   FILE *f = fopen("comment.txt", "a");
+// 	   			if (f == NULL)
+// 	  			{
+// 	   				printf("Error opening file!\n");
+// 	   				exit(1);
+// 	   			}
+//	   			fprintf(f, "reached j loop, %d\n", j);
+//     			fclose(f);
 //             // Add each bit into the storage bytes
 //             dht11_dat[j / 8] <<= 1;
 //             if ( counter > 16 )
@@ -53,14 +61,6 @@ package main
 //         }
 //     }
 //     // Check that 40 bits (8bit x 5 ) were read + verify checksum in the last byte
-//	   FILE *f = fopen("comment.txt", "a");
-// 	   if (f == NULL)
-// 	   {
-// 	   		printf("Error opening file!\n");
-// 	   		exit(1);
-// 	   }
-//	   fprintf(f, "%d\n", j);
-//     fclose(f);
 //     if ( (j >= 40) && (dht11_dat[4] == ( (dht11_dat[0] + dht11_dat[1] + dht11_dat[2] + dht11_dat[3]) & 0xFF) ) )
 //     {
 //		   f = fopen("file.txt", "a");
