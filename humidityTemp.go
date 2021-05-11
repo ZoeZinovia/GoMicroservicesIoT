@@ -7,9 +7,9 @@ package main
 // #include <stdint.h>
 // #define MAX_TIMINGS	85
 // #define DHT_PIN		7	/* GPIO-4 */
-// int data[5] = { 0, 0, 0, 0, 0 };
 // void read_dht_data()
 // {
+//  int data[5] = { 0, 0, 0, 0, 0 };
 //	wiringPiSetup();
 // 	uint8_t laststate	= HIGH;
 // 	uint8_t counter		= 0;
