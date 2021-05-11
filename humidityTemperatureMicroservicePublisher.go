@@ -1,6 +1,5 @@
 package main
 
-// #cgo LDFLAGS: -L/usr/bin/gpio -lwiringPi
 // #include <wiringPi.h>
 // #include <stdio.h>
 // #include <stdlib.h>
