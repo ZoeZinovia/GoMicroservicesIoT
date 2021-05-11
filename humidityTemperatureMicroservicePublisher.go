@@ -61,7 +61,7 @@ package main
 //         }
 //     }
 //     // Check that 40 bits (8bit x 5 ) were read + verify checksum in the last byte
-//	   FILE *f = fopen("comment.txt", "a");
+//	   f = fopen("comment.txt", "a");
 // 	   if (f == NULL)
 // 	   {
 // 	   		printf("Error opening file!\n");
@@ -71,7 +71,7 @@ package main
 //     fclose(f);
 //     if ( (j >= 40) && (dht11_dat[4] == ( (dht11_dat[0] + dht11_dat[1] + dht11_dat[2] + dht11_dat[3]) & 0xFF) ) )
 //     {
-//		   FILE *f = fopen("file.txt", "a");
+//		   f = fopen("file.txt", "a");
 // 		   if (f == NULL)
 // 		   {
 // 		   		printf("Error opening file!\n");
@@ -81,7 +81,7 @@ package main
 //         fclose(f);
 //		   return dht11_dat; // If all ok, return pointer to the data array
 //     } else  {
-//	       FILE *f = fopen("file.txt", "a");
+//	       f = fopen("file.txt", "a");
 // 		   if (f == NULL)
 // 		   {
 // 		   		printf("Error opening file!\n");
