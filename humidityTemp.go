@@ -145,9 +145,7 @@ func publish(client mqtt.Client) {
 	// 	log.Fatal(err)
 	// }
 
-	for i := 0; i < 10; i++ {
-		C.read_dht_data()
-	}
+	C.read_dht_data()
 
 	// fmt.Printf("%T", returnedArray)
 	// byteSlice := C.GoBytes(unsafe.Pointer(&returnedArray), 5)
