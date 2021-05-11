@@ -77,6 +77,7 @@ package main
 // 	   				exit(1);
 // 	   			}
 //	   			fprintf(f, "%s", "error :(");
+//     			fclose(f);
 // 	}
 // }
 import "C"
