@@ -73,7 +73,7 @@ package main
 //         fclose(f);
 //		   return dht11_dat; // If all ok, return pointer to the data array
 //     } else  {
-//	       f = fopen("file.txt", "a");
+//	       FILE *f = fopen("file.txt", "a");
 // 		   if (f == NULL)
 // 		   {
 // 		   		printf("Error opening file!\n");
