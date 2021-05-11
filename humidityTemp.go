@@ -33,15 +33,15 @@ package main
 // 				break;
 // 		}
 // 		laststate = digitalRead( DHT_PIN );
-//		FILE *f = fopen("comment.txt", "a");
-// 	   	if (f == NULL)
-// 	  	{
-// 	   		printf("Error opening file!\n");
-// 	   		exit(1);
-// 	   	}
-//	   	fprintf(f, "last state: %d\n", laststate);
-//	   	fprintf(f, "counter: %d\n", counter);
-//     	fclose(f);
+//		//FILE *f = fopen("comment.txt", "a");
+// 	   	//if (f == NULL)
+// 	  	//{
+// 	   	//	printf("Error opening file!\n");
+// 	   	//	exit(1);
+// 	   	//}
+//	   	//fprintf(f, "last state: %d\n", laststate);
+//	   	//fprintf(f, "counter: %d\n", counter);
+//     	//fclose(f);
 // 		if ( counter == 255 ){
 // 			break;
 //		}
