@@ -10,74 +10,13 @@ package main
 // #define DHTPIN		7
 // int dht11_dat[5] = { 0, 0, 0, 0, 0 };
 // // Reading of the dht11 is rather complex in C/C++. See this site that explains how readings are made: http://www.uugear.com/portfolio/dht11-humidity-temperature-sensor-module/
-// int* read_dht11_dat()
+// int read_dht11_dat()
 // {
 //	   wiringPiSetupGpio();
-//     u_int8_t laststate	= HIGH;
-//     u_int8_t counter		= 0;
-//     u_int8_t j		= 0, i;
-//	   pinMode(32, OUTPUT);
-//	   digitalWrite(32, HIGH);
-//     dht11_dat[0] = dht11_dat[1] = dht11_dat[2] = dht11_dat[3] = dht11_dat[4] = 0;
-//     // pull pin down for 18 milliseconds. This is called “Start Signal” and it is to ensure DHT11 has detected the signal from MCU.
-//     pinMode( DHTPIN, OUTPUT );
-//     digitalWrite( DHTPIN, LOW );
-//     delay( 18 );
-//     // Then MCU will pull up DATA pin for 40us to wait for DHT11’s response.
-//     digitalWrite( DHTPIN, HIGH );
-//     delayMicroseconds( 40 );
-//     // Prepare to read the pin
-//     pinMode( DHTPIN, INPUT );
-//     // Detect change and read data
-//     for ( i = 0; i < MAXTIMINGS; i++ )
-//     {
-//         counter = 0;
-//         while ( digitalRead( DHTPIN ) == laststate )
-//         {
-//             counter++;
-//             delayMicroseconds( 1 );
-//             if ( counter == 255 )
-//             {
-//                 break;
-//             }
-//         }
-//         laststate = digitalRead( DHTPIN );
-//         if ( counter == 255 )
-//             break;
-//         // Ignore first 3 transitions
-//         if ( (i >= 4) && (i % 2 == 0) )
-//         {
-//             // Add each bit into the storage bytes
-//             dht11_dat[j / 8] <<= 1;
-//             if ( counter > 16 )
-//                 dht11_dat[j / 8] |= 1;
-//             j++;
-//         }
-//     }
-//     // Check that 40 bits (8bit x 5 ) were read + verify checksum in the last byte
-//     if ( (j >= 40) && (dht11_dat[4] == ( (dht11_dat[0] + dht11_dat[1] + dht11_dat[2] + dht11_dat[3]) & 0xFF) ) )
-//     {
-//		   FILE *f = fopen("file.txt", "w");
-// 		   if (f == NULL)
-// 		   {
-// 		   		printf("Error opening file!\n");
-// 		   		exit(1);
-// 		   }
-//		   fprintf(f, "Temp: %d, %d, Humidity: %d, %d\n", dht11_dat[0], dht11_dat[1], dht11_dat[2], dht11_dat[3]);
-//         fclose(f);
-//		   return dht11_dat; // If all ok, return pointer to the data array
-//     } else  {
-//	       FILE *f = fopen("file.txt", "w");
-// 		   if (f == NULL)
-// 		   {
-// 		   		printf("Error opening file!\n");
-// 		   		exit(1);
-// 		   }
-//		   fprintf(f, "Temp: %d, %d, Humidity: %d, %d\n", dht11_dat[0], dht11_dat[1], dht11_dat[2], dht11_dat[3]);
-//		   fclose(f);
-//         dht11_dat[0] = 255;
-//         return dht11_dat; //If there was an error, set first array element to -1 as flag to main function
-//     }
+//	   pinMode(12, OUTPUT);
+//	   digitalWrite(12, HIGH);
+//	   pinMode(12, INPUT);
+//	   return digitalRead(12);
 // }
 import "C"
 
@@ -89,7 +28,6 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
-	"unsafe"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 )
@@ -128,23 +66,24 @@ func publish(client mqtt.Client) {
 	// }
 
 	returnedArray := C.read_dht11_dat()
+	fmt.Println(returnedArray)
 
-	fmt.Printf("%T", returnedArray)
-	byteSlice := C.GoBytes(unsafe.Pointer(&returnedArray), 5)
+	// fmt.Printf("%T", returnedArray)
+	// byteSlice := C.GoBytes(unsafe.Pointer(&returnedArray), 5)
 
-	counter := 0
-	for (byteSlice[0] == 255) && (counter < 5) {
-		returnedArray := C.read_dht11_dat()
-		byteSlice = C.GoBytes(unsafe.Pointer(&returnedArray), 5)
-		counter++
-	}
-	if counter == 5 {
-		fmt.Println("Problem encountered with DHT. Please check.")
-		os.Exit(0)
-	}
-	mySlice := byteSliceToIntSlice(byteSlice)
+	// counter := 0
+	// for (byteSlice[0] == 255) && (counter < 5) {
+	// 	returnedArray := C.read_dht11_dat()
+	// 	byteSlice = C.GoBytes(unsafe.Pointer(&returnedArray), 5)
+	// 	counter++
+	// }
+	// if counter == 5 {
+	// 	fmt.Println("Problem encountered with DHT. Please check.")
+	// 	os.Exit(0)
+	// }
+	// mySlice := byteSliceToIntSlice(byteSlice)
 
-	fmt.Println(mySlice[0], mySlice[1], mySlice[2], mySlice[3], mySlice[4])
+	// fmt.Println(mySlice[0], mySlice[1], mySlice[2], mySlice[3], mySlice[4])
 	// temperatureReading := mySlice[0] + (mySlice[1] / 10)
 	// humidityReading := mySlice[2] + (mySlice[3] / 10)
 
