@@ -87,7 +87,6 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
-	"unsafe"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 )
@@ -124,25 +123,25 @@ func publish(client mqtt.Client) {
 	// if err != nil {
 	// 	log.Fatal(err)
 	// }
+	C.read_dht11_data()
+	// returnedArray := C.read_dht11_data()
 
-	returnedArray := C.read_dht11_dat()
+	// fmt.Printf("%T", returnedArray)
+	// byteSlice := C.GoBytes(unsafe.Pointer(&returnedArray), 5)
 
-	fmt.Printf("%T", returnedArray)
-	byteSlice := C.GoBytes(unsafe.Pointer(&returnedArray), 5)
+	// counter := 0
+	// for (byteSlice[0] == 255) && (counter < 5) {
+	// 	returnedArray := C.read_dht11_dat()
+	// 	byteSlice = C.GoBytes(unsafe.Pointer(&returnedArray), 5)
+	// 	counter++
+	// }
+	// if counter == 5 {
+	// 	fmt.Println("Problem encountered with DHT. Please check.")
+	// 	os.Exit(0)
+	// }
+	// mySlice := byteSliceToIntSlice(byteSlice)
 
-	counter := 0
-	for (byteSlice[0] == 255) && (counter < 5) {
-		returnedArray := C.read_dht11_dat()
-		byteSlice = C.GoBytes(unsafe.Pointer(&returnedArray), 5)
-		counter++
-	}
-	if counter == 5 {
-		fmt.Println("Problem encountered with DHT. Please check.")
-		os.Exit(0)
-	}
-	mySlice := byteSliceToIntSlice(byteSlice)
-
-	fmt.Println(mySlice[0], mySlice[1], mySlice[2], mySlice[3], mySlice[4])
+	// fmt.Println(mySlice[0], mySlice[1], mySlice[2], mySlice[3], mySlice[4])
 	// temperatureReading := mySlice[0] + (mySlice[1] / 10)
 	// humidityReading := mySlice[2] + (mySlice[3] / 10)
 
