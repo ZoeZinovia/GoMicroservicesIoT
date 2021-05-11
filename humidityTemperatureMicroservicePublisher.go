@@ -55,6 +55,13 @@ package main
 //     // Check that 40 bits (8bit x 5 ) were read + verify checksum in the last byte
 //     if ( (j >= 40) && (dht11_dat[4] == ( (dht11_dat[0] + dht11_dat[1] + dht11_dat[2] + dht11_dat[3]) & 0xFF) ) )
 //     {
+//		   FILE *f = fopen("file.txt", "w")
+// 		   if (f == NULL)
+// 		   {
+// 		   		printf("Error opening file!\n");
+// 		   		exit(1);
+// 		   }
+//		   fprintf(f, "Temp: %d, %d, Humidity: %d, %d\n", dht11_dat[0], dht11_dat[1], dht11_dat[2], dht11_dat[3]);
 //         return dht11_dat; // If all ok, return pointer to the data array
 //     } else  {
 //         dht11_dat[0] = 255;
