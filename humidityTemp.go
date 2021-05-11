@@ -268,7 +268,7 @@ func main() {
 	// Publish to topic
 	for i := 0; i < 2; i++ {
 		publish(client)
-		time.Sleep(2000)
+		time.Sleep(2 * time.Second)
 	}
 
 	// Disconnect
