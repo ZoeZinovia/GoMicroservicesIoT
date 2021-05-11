@@ -109,7 +109,8 @@ func publish(client mqtt.Client) {
 	// 	log.Fatal(err)
 	// }
 
-	mySlice := C.GoBytes(unsafe.Pointer(&C.read_dht11_dat()), 5)
+	returnedArray := C.read_dht11_dat()
+	mySlice := C.GoBytes(unsafe.Pointer(&returnedArray), 5)
 
 	fmt.Println(mySlice)
 	// currentTemperature := tempStruct{
