@@ -51,7 +51,7 @@ package main
 // 	   	}
 //	   	fprintf(f, "last state: %d\n", laststate);
 //     	fclose(f);
-// 		if ( counter == 255 )
+// 		if ( counter == 255 ){
 //			FILE *f = fopen("comment.txt", "a");
 // 	   		if (f == NULL)
 // 	  		{
@@ -61,6 +61,7 @@ package main
 //	   		fprintf(f, "%s", "breaking : 2\n");
 //     		fclose(f);
 // 			break;
+//		}
 // 		/* ignore first 3 transitions */
 // 		if ( (i >= 4) && (i % 2 == 0) )
 // 		{
