@@ -46,12 +46,12 @@ func publish(client mqtt.Client) {
 	// 	log.Fatal(err)
 	// }
 
-	gpio, err := wiringpi.Setup(wiringpi.WiringPiSetup)
+	_, err := wiringpi.Setup(wiringpi.WiringPiSetup)
 	if err != nil {
 		panic(err)
 	}
 
-	gpio.PinMode(1, wiringpi.In)
+	// gpio.PinMode(1, wiringpi.In)
 
 	// currentTemperature := tempStruct{
 	// 	Temp: temperatureReading,
