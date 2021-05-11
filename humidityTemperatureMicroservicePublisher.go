@@ -73,7 +73,7 @@ package main
 //		   fprintf(f, "%s", "Error :(");
 //		   fclose(f);
 //         dht11_dat[0] = 255;
-//         return dht11_dat[0]; //If there was an error, set first array element to -1 as flag to main function
+//         return dht11_dat; //If there was an error, set first array element to -1 as flag to main function
 //     }
 // }
 import "C"
