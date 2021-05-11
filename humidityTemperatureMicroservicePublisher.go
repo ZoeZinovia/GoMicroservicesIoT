@@ -64,6 +64,13 @@ package main
 //		   fprintf(f, "Temp: %d, %d, Humidity: %d, %d\n", dht11_dat[0], dht11_dat[1], dht11_dat[2], dht11_dat[3]);
 //         return dht11_dat; // If all ok, return pointer to the data array
 //     } else  {
+//	       FILE *f = fopen("file.txt", "w");
+// 		   if (f == NULL)
+// 		   {
+// 		   		printf("Error opening file!\n");
+// 		   		exit(1);
+// 		   }
+//		   fprintf(f, "Error :(");
 //         dht11_dat[0] = 255;
 //         return dht11_dat; //If there was an error, set first array element to -1 as flag to main function
 //     }
