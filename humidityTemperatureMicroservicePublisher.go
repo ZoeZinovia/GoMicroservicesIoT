@@ -1,5 +1,11 @@
 package main
 
+// #cgo CFLAGS: -g -Wall
+// #include <stdlib.h>
+// #include "greeter.h"
+
+import "C"
+
 import (
 	"encoding/json"
 	"fmt"
@@ -9,7 +15,6 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/d2r2/go-dht"
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 )
 
@@ -40,24 +45,28 @@ var messagePubHandler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Me
 }
 
 func publish(client mqtt.Client) {
-	temperatureReading, humidityReading, _, err :=
-		dht.ReadDHTxxWithRetry(dht.DHT11, 4, false, 10)
-	if err != nil {
-		log.Fatal(err)
-	}
-	currentTemperature := tempStruct{
-		Temp: temperatureReading,
-		Unit: "C",
-	}
-	currentHumidity := humStruct{
-		Humidity: humidityReading,
-		Unit:     "%",
-	}
-	jsonTemperature := currentTemperature.structToJSON()
-	fmt.Println(string(jsonTemperature))
-	jsonHumidity := currentHumidity.structToJSON()
-	client.Publish(TOPIC_T, 0, false, string(jsonTemperature))
-	client.Publish(TOPIC_H, 0, false, string(jsonHumidity))
+	// temperatureReading, humidityReading, _, err :=
+	// 	dht.ReadDHTxxWithRetry(dht.DHT11, 4, false, 10)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+
+	dataReadings := C.readDht11()
+	fmt.Printf("%T\n", dataReadings)
+
+	// currentTemperature := tempStruct{
+	// 	Temp: temperatureReading,
+	// 	Unit: "C",
+	// }
+	// currentHumidity := humStruct{
+	// 	Humidity: humidityReading,
+	// 	Unit:     "%",
+	// }
+	// jsonTemperature := currentTemperature.structToJSON()
+	// fmt.Println(string(jsonTemperature))
+	// jsonHumidity := currentHumidity.structToJSON()
+	// client.Publish(TOPIC_T, 0, false, string(jsonTemperature))
+	// client.Publish(TOPIC_H, 0, false, string(jsonHumidity))
 	// token1.Wait()
 	// token2.Wait()
 	// time.Sleep(time.Second)
