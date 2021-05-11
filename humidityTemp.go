@@ -28,7 +28,7 @@ package main
 // 		while ( digitalRead( DHT_PIN ) == laststate )
 // 		{
 // 			counter++;
-// 			delayMicroseconds( 2 );
+// 			delayMicroseconds( 1 );
 // 			if ( counter == 255 )
 // 				break;
 // 		}
@@ -59,6 +59,14 @@ package main
 // 	 * check we read 40 bits (8bit x 5 ) + verify checksum in the last byte
 // 	 * print it out if data is good
 // 	 */
+//		FILE *f = fopen("comment.txt", "a");
+// 	   	if (f == NULL)
+// 	  	{
+// 	   		printf("Error opening file!\n");
+// 	   		exit(1);
+// 	   	}
+//	   	fprintf(f, "j value: %d\n", j);
+//     	fclose(f);
 // 	if ( (j >= 40) &&
 // 	     (data[4] == ( (data[0] + data[1] + data[2] + data[3]) & 0xFF) ) )
 // 	{
