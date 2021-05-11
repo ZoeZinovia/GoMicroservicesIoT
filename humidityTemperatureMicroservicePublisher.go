@@ -111,7 +111,7 @@ func publish(client mqtt.Client) {
 
 	returnedArray := C.read_dht11_dat()
 
-	fmt.Println(returnedArray)
+	fmt.Println(&returnedArray)
 	byteSlice := C.GoBytes(unsafe.Pointer(&returnedArray), 5)
 
 	counter := 0
