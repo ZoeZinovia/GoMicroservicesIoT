@@ -10,7 +10,7 @@ package main
 // int data[5] = { 0, 0, 0, 0, 0 };
 // void read_dht_data()
 // {
-//	FILE *f = fopen("comment.txt", "a")
+//	FILE *f = fopen("comment.txt", "a");
 // 	uint8_t laststate	= HIGH;
 // 	uint8_t counter		= 0;
 // 	uint8_t j			= 0, i;
