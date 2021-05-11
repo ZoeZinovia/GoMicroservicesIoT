@@ -53,7 +53,7 @@ package main
 //         }
 //     }
 //     // Check that 40 bits (8bit x 5 ) were read + verify checksum in the last byte
-//	   f = fopen("comment.txt", "a");
+//	   FILE *f = fopen("comment.txt", "a");
 // 	   if (f == NULL)
 // 	   {
 // 	   		printf("Error opening file!\n");
