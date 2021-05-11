@@ -31,6 +31,14 @@ package main
 // 			delayMicroseconds( 1 );
 // 			if ( counter == 255 )
 // 			{
+//			FILE *f = fopen("comment.txt", "a");
+// 	   		if (f == NULL)
+// 	  		{
+// 	   			printf("Error opening file!\n");
+// 	   			exit(1);
+// 	   		}
+//	   		fprintf(f, "%s", "breaking : 1\n");
+//     		fclose(f);
 // 				break;
 // 			}
 // 		}
@@ -41,10 +49,17 @@ package main
 // 	   		printf("Error opening file!\n");
 // 	   		exit(1);
 // 	   	}
-//	   	fprintf(f, "%s", "error :(\n");
 //	   	fprintf(f, "last state: %d\n", laststate);
 //     	fclose(f);
 // 		if ( counter == 255 )
+//			FILE *f = fopen("comment.txt", "a");
+// 	   		if (f == NULL)
+// 	  		{
+// 	   			printf("Error opening file!\n");
+// 	   			exit(1);
+// 	   		}
+//	   		fprintf(f, "%s", "breaking : 2\n");
+//     		fclose(f);
 // 			break;
 // 		/* ignore first 3 transitions */
 // 		if ( (i >= 4) && (i % 2 == 0) )
