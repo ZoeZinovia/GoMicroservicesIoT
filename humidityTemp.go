@@ -30,7 +30,7 @@ package main
 // 		while ( digitalRead( DHT_PIN ) == laststate )
 // 		{
 // 			counter++;
-// 			delayMicroseconds(  );
+// 			delayMicroseconds( 2 );
 // 			if ( counter == 255 )
 // 				break;
 // 		}
