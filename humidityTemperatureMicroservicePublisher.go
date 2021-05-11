@@ -57,7 +57,7 @@ package main
 //     {
 //         return dht11_dat; // If all ok, return pointer to the data array
 //     } else  {
-//         dht11_dat[0] = -1;
+//         dht11_dat[0] = 255;
 //         return dht11_dat; //If there was an error, set first array element to -1 as flag to main function
 //     }
 // }
@@ -110,18 +110,20 @@ func publish(client mqtt.Client) {
 	// }
 
 	returnedArray := C.read_dht11_dat()
-	mySlice := C.GoBytes(unsafe.Pointer(&returnedArray), 5)
+	byteSlice := C.GoBytes(unsafe.Pointer(&returnedArray), 5)
 
 	counter := 0
-	for (mySlice[0] == -1) && (counter < 5) {
+	for (byteSlice[0] == 255) && (counter < 5) {
 		returnedArray := C.read_dht11_dat()
-		mySlice := C.GoBytes(unsafe.Pointer(&returnedArray), 5)
+		byteSlice = C.GoBytes(unsafe.Pointer(&returnedArray), 5)
 		counter++
 	}
 	if counter == 5 {
 		fmt.Println("Problem encountered with DHT. Please check.")
 		os.Exit(0)
 	}
+	mySlice := byteSliceToIntSlice(byteSlice)
+
 	temperatureReading := mySlice[0] + (mySlice[1] / 10)
 	humidityReading := mySlice[2] + (mySlice[3] / 10)
 
@@ -147,6 +149,14 @@ func publish(client mqtt.Client) {
 
 func getJSON(r reading) []byte {
 	return r.structToJSON()
+}
+
+func byteSliceToIntSlice(bs []byte) []int {
+	result := make([]int, len(bs))
+	for i, b := range bs {
+		result[i] = int(b)
+	}
+	return result
 }
 
 func (ts tempStruct) structToJSON() []byte {
