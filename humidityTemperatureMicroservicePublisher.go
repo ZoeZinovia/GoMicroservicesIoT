@@ -14,9 +14,9 @@ package main
 // {
 //	   wiringPiSetupGpio();
 //	   pinMode(12, INPUT);
-//	   return digitalRead(12);
 //	   pinMode(12, OUTPUT);
 //	   digitalWrite(12, 1);
+//	   return digitalRead(12);
 // }
 import "C"
 
