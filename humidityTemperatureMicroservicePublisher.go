@@ -1,6 +1,6 @@
 package main
 
-// #cgo LDFLAGS: -lwiringPi
+// #cgo LDFLAGS: -lstdc++
 // #include <wiringPi.h>
 // #include <stdio.h>
 // #include <stdlib.h>
