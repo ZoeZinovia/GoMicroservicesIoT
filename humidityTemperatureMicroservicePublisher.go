@@ -108,7 +108,7 @@ func publish(client mqtt.Client) {
 	// 	log.Fatal(err)
 	// }
 
-	ptr := C.malloc(5 * C.sizeof(int))
+	ptr := C.malloc(5 * C.sizeof_int)
 	defer C.free(unsafe.Pointer(ptr))
 
 	_ = C.read_dht11_dat((*C.int)(ptr))
