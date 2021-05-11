@@ -124,6 +124,7 @@ func publish(client mqtt.Client) {
 	// 	log.Fatal(err)
 	// }
 
+	wiringPiSetup()
 	C.read_dht_data()
 
 	// fmt.Printf("%T", returnedArray)
