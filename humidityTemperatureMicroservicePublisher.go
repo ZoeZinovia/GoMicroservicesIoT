@@ -8,15 +8,14 @@ package main
 // // Pi dht11 variables
 // #define MAXTIMINGS	85
 // #define DHTPIN		4
-// int dht11_dat[5] = { 0, 0, 0, 0, 0 };
 // // Reading of the dht11 is rather complex in C/C++. See this site that explains how readings are made: http://www.uugear.com/portfolio/dht11-humidity-temperature-sensor-module/
-// int* read_dht11_dat()
+// int* read_dht11_dat(int *data)
 // {
 //	   wiringPiSetup();
 //     u_int8_t laststate	= HIGH;
 //     u_int8_t counter		= 0;
 //     u_int8_t j		= 0, i;
-//     dht11_dat[0] = dht11_dat[1] = dht11_dat[2] = dht11_dat[3] = dht11_dat[4] = 0;
+//     data[0] = data[1] = data[2] = data[3] = data[4] = 0;
 //     // pull pin down for 18 milliseconds. This is called “Start Signal” and it is to ensure DHT11 has detected the signal from MCU.
 //     pinMode( DHTPIN, OUTPUT );
 //     digitalWrite( DHTPIN, LOW );
@@ -46,19 +45,19 @@ package main
 //         if ( (i >= 4) && (i % 2 == 0) )
 //         {
 //             // Add each bit into the storage bytes
-//             dht11_dat[j / 8] <<= 1;
+//             data[j / 8] <<= 1;
 //             if ( counter > 16 )
-//                 dht11_dat[j / 8] |= 1;
+//                 data[j / 8] |= 1;
 //             j++;
 //         }
 //     }
 //     // Check that 40 bits (8bit x 5 ) were read + verify checksum in the last byte
-//     if ( (j >= 40) && (dht11_dat[4] == ( (dht11_dat[0] + dht11_dat[1] + dht11_dat[2] + dht11_dat[3]) & 0xFF) ) )
+//     if ( (j >= 40) && (data[4] == ( (data[0] + data[1] + data[2] + data[3]) & 0xFF) ) )
 //     {
-//         return dht11_dat; // If all ok, return pointer to the data array
+//         return data; // If all ok, return pointer to the data array
 //     } else  {
-//         dht11_dat[0] = -1;
-//         return dht11_dat; //If there was an error, set first array element to -1 as flag to main function
+//         data[0] = -1;
+//         return data; //If there was an error, set first array element to -1 as flag to main function
 //     }
 // }
 import "C"
@@ -71,6 +70,7 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
+	"unsafe"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 )
@@ -108,8 +108,14 @@ func publish(client mqtt.Client) {
 	// 	log.Fatal(err)
 	// }
 
-	dataReadings := C.read_dht11_dat()
-	fmt.Printf("%T\n", dataReadings)
+	ptr := C.malloc(5 * C.sizeof(int))
+	defer C.free(unsafe.Pointer(ptr))
+
+	_ = C.read_dht11_dat((*C.int)(ptr))
+
+	finalData := C.GoBytes(ptr, 5)
+
+	fmt.Println(finalData)
 
 	// currentTemperature := tempStruct{
 	// 	Temp: temperatureReading,
