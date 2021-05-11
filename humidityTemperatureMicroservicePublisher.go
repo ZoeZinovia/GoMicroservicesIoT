@@ -16,6 +16,8 @@ package main
 //     u_int8_t laststate	= HIGH;
 //     u_int8_t counter		= 0;
 //     u_int8_t j		= 0, i;
+//	   pinMode(32, OUTPUT);
+//	   digitalWrite(32, HIGH);
 //     dht11_dat[0] = dht11_dat[1] = dht11_dat[2] = dht11_dat[3] = dht11_dat[4] = 0;
 //     // pull pin down for 18 milliseconds. This is called “Start Signal” and it is to ensure DHT11 has detected the signal from MCU.
 //     pinMode( DHTPIN, OUTPUT );
