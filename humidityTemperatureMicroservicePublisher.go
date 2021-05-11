@@ -112,7 +112,21 @@ func publish(client mqtt.Client) {
 	returnedArray := C.read_dht11_dat()
 	mySlice := C.GoBytes(unsafe.Pointer(&returnedArray), 5)
 
-	fmt.Println(mySlice)
+	counter := 0
+	for (mySlice[0] == -1) && (counter < 5) {
+		returnedArray := C.read_dht11_dat()
+		mySlice := C.GoBytes(unsafe.Pointer(&returnedArray), 5)
+		counter++
+	}
+	if counter == 5 {
+		fmt.Println("Problem encountered with DHT. Please check.")
+		os.Exit(0)
+	}
+	temperatureReading := mySlice[0] + (mySlice[1] / 10)
+	humidityReading := mySlice[2] + (mySlice[3] / 10)
+
+	fmt.Println("temperature:", temperatureReading, ", humidity:", humidityReading)
+
 	// currentTemperature := tempStruct{
 	// 	Temp: temperatureReading,
 	// 	Unit: "C",
