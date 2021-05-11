@@ -7,7 +7,7 @@ package main
 // #include <stdint.h>
 // #define MAX_TIMINGS	85
 // #define DHT_PIN		7	/* GPIO-4 */
-// void read_dht_data()
+// int* read_dht_data()
 // {
 //  int data[5] = { 0, 0, 0, 0, 0 };
 //	wiringPiSetup();
@@ -87,6 +87,7 @@ package main
 //	 	fprintf(f, "%s", "worked :))\n");
 //	   	fprintf(f, "%d, %d, %d, %d, %d\n", data[0], data[1], data[2], data[3], data[4]);
 //     	fclose(f);
+//		return data;
 // 	}else  {
 //		FILE *f = fopen("comment.txt", "a");
 // 	   	if (f == NULL)
@@ -97,6 +98,7 @@ package main
 //	   	fprintf(f, "%s", "error :(\n");
 //	   	fprintf(f, "%d, %d, %d, %d, %d\n", data[0], data[1], data[2], data[3], data[4]);
 //     	fclose(f);
+//		return data;
 // 	}
 // }
 import "C"
@@ -109,6 +111,7 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
+	"unsafe"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 )
@@ -146,10 +149,10 @@ func publish(client mqtt.Client) {
 	// 	log.Fatal(err)
 	// }
 
-	C.read_dht_data()
+	returnedArray := C.read_dht_data()
 
-	// fmt.Printf("%T", returnedArray)
-	// byteSlice := C.GoBytes(unsafe.Pointer(&returnedArray), 5)
+	fmt.Printf("%T", returnedArray)
+	byteSlice := C.GoBytes(unsafe.Pointer(&returnedArray), 5)
 
 	// counter := 0
 	// for (byteSlice[0] == 255) && (counter < 5) {
@@ -161,13 +164,13 @@ func publish(client mqtt.Client) {
 	// 	fmt.Println("Problem encountered with DHT. Please check.")
 	// 	os.Exit(0)
 	// }
-	// mySlice := byteSliceToIntSlice(byteSlice)
+	mySlice := byteSliceToIntSlice(byteSlice)
 
 	// fmt.Println(mySlice[0], mySlice[1], mySlice[2], mySlice[3], mySlice[4])
-	// temperatureReading := mySlice[0] + (mySlice[1] / 10)
-	// humidityReading := mySlice[2] + (mySlice[3] / 10)
+	temperatureReading := mySlice[0] + (mySlice[1] / 10)
+	humidityReading := mySlice[2] + (mySlice[3] / 10)
 
-	// fmt.Println("temperature:", temperatureReading, ", humidity:", humidityReading)
+	fmt.Println("temperature:", temperatureReading, ", humidity:", humidityReading)
 
 	// currentTemperature := tempStruct{
 	// 	Temp: temperatureReading,
