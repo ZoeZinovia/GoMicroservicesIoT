@@ -148,7 +148,7 @@ func publish(client mqtt.Client) {
 	// 	log.Fatal(err)
 	// }
 
-	var returnArray *C.int = C.read_dht11_data()
+	var returnArray *C.int = C.read_dht_data()
 	length := 5
 	mySlice := (*[1 << 30]C.int)(unsafe.Pointer(returnArray))[:length:length]
 
