@@ -10,9 +10,6 @@ package main
 // int data[5] = { 0, 0, 0, 0, 0 };
 // int * read_dht_data()
 // {
-//   if(data == NULL || length == 0){
-//		return 0;
-//   }
 //	wiringPiSetup();
 // 	uint8_t laststate	= HIGH;
 // 	uint8_t counter		= 0;
