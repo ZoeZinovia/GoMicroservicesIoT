@@ -47,11 +47,12 @@ func publish(client mqtt.Client) {
 		pirPin := rpio.Pin(17)
 		pirPin.Input()
 		pirReading := pirPin.Read()
-		currentPIR := pirStruct{
-			PIR: pirReading,
-		}
-		jsonPIR := currentPIR.structToJSON()
-		client.Publish(TOPIC, 0, false, string(jsonPIR))
+		fmt.Println(pirReading)
+		// currentPIR := pirStruct{
+		// 	PIR: pirReading,
+		// }
+		// jsonPIR := currentPIR.structToJSON()
+		// client.Publish(TOPIC, 0, false, string(jsonPIR))
 		return
 	}
 }
@@ -112,7 +113,7 @@ func main() {
 	}
 
 	// Publish to topic
-	numIterations := 100
+	numIterations := 2
 	for i := 0; i < numIterations; i++ {
 		if i == numIterations-1 {
 			sessionStatus = false
