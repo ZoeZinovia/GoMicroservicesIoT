@@ -133,8 +133,8 @@ func publish(client mqtt.Client) {
 		}
 		mySlice := byteSliceToIntSlice(byteSlice)
 		fmt.Println(mySlice[0], mySlice[1], mySlice[2], mySlice[3], mySlice[4])
-		temperatureReading = float32(mySlice[0] + (mySlice[1] / 10))
-		humidityReading = float32(mySlice[2] + (mySlice[3] / 10))
+		temperatureReading = float32(mySlice[2] + (mySlice[3] / 10))
+		humidityReading = float32(mySlice[0] + (mySlice[1] / 10))
 		fmt.Println("temperature:", temperatureReading, ", humidity:", humidityReading)
 	}
 
@@ -246,7 +246,7 @@ func main() {
 	// Publish to topic
 	for i := 0; i < 2; i++ {
 		publish(client)
-		time.Sleep(1 * time.Second)
+		time.Sleep(2 * time.Second)
 	}
 
 	// Disconnect
