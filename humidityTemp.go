@@ -10,7 +10,7 @@ package main
 // #define MAX_TIMINGS	85
 // #define DHT_PIN		7	/* GPIO-4 */
 // int data[5] = { 0, 0, 0, 0, 0 };
-// clock_t timer = clock();
+// clock_t timer = 0;
 // int read_dht_data()
 // {
 //  clock_t current_time = clock();
