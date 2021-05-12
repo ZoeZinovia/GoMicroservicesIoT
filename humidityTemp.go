@@ -156,6 +156,7 @@ func publish(client mqtt.Client) {
 	jsonHumidity := currentHumidity.structToJSON()
 	client.Publish(TOPIC_T, 0, false, string(jsonTemperature))
 	client.Publish(TOPIC_H, 0, false, string(jsonHumidity))
+	return
 }
 
 func getJSON(r reading) []byte {
