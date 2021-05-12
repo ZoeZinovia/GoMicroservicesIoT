@@ -8,7 +8,7 @@ package main
 // #define MAX_TIMINGS	85
 // #define DHT_PIN		7	/* GPIO-4 */
 // int data[5] = { 0, 0, 0, 0, 0 };
-// int* read_dht_data()
+// float read_dht_data()
 // {
 //	wiringPiSetup();
 // 	uint8_t laststate	= HIGH;
@@ -77,7 +77,6 @@ package main
 // 		{
 // 			c = -c;
 // 		}
-// 		float fT = c * 1.8f + 32;
 //		FILE *f = fopen("comment.txt", "a");
 // 	   	if (f == NULL)
 // 	  	{
@@ -87,7 +86,7 @@ package main
 //	 	fprintf(f, "%s", "worked :))\n");
 //	   	fprintf(f, "%d, %d, %d, %d, %d\n", data[0], data[1], data[2], data[3], data[4]);
 //     	fclose(f);
-//		return data;
+//		return c;
 // 	}else  {
 //		FILE *f = fopen("comment.txt", "a");
 // 	   	if (f == NULL)
@@ -98,7 +97,7 @@ package main
 //	   	fprintf(f, "%s", "error :(\n");
 //	   	fprintf(f, "%d, %d, %d, %d, %d\n", data[0], data[1], data[2], data[3], data[4]);
 //     	fclose(f);
-//		return data;
+//		return c;
 // 	}
 // }
 import "C"
@@ -111,7 +110,6 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
-	"unsafe"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 )
@@ -149,10 +147,10 @@ func publish(client mqtt.Client) {
 	// 	log.Fatal(err)
 	// }
 
-	returnedArray := C.read_dht_data()
+	returnedValue := C.read_dht_data()
 
-	fmt.Printf("%T", returnedArray)
-	byteSlice := C.GoBytes(unsafe.Pointer(&returnedArray), 5)
+	fmt.Printf("%T", returnedValue)
+	// byteSlice := C.GoBytes(unsafe.Pointer(&returnedArray), 5)
 
 	// counter := 0
 	// for (byteSlice[0] == 255) && (counter < 5) {
