@@ -132,6 +132,7 @@ func publish(client mqtt.Client) {
 			log.Fatal(readErr)
 		}
 		mySlice := byteSliceToIntSlice(byteSlice)
+		fmt.Println(len(byteSlice), returnedValue)
 		fmt.Println(mySlice[0], mySlice[1], mySlice[2], mySlice[3], mySlice[4])
 		temperatureReading = float32(mySlice[2] + (mySlice[3] / 10))
 		humidityReading = float32(mySlice[0] + (mySlice[1] / 10))
