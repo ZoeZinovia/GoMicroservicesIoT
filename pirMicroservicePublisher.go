@@ -50,6 +50,7 @@ func publish(client mqtt.Client) {
 		var pirReading bool
 		if int(readValue) == 1 {
 			pirReading = true
+			fmt.Println("True!!")
 		} else {
 			pirReading = false
 		}
