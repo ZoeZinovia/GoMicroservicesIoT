@@ -164,9 +164,9 @@ func getJSON(r reading) []byte {
 
 func byteSliceToIntSlice(bs []byte) []int {
 	strings := strings.Split(string(bs), ",")
-	for _, s := range strings {
-		fmt.Println(s)
-	}
+	// for _, s := range strings {
+	// 	fmt.Println(s)
+	// }
 	result := make([]int, len(strings))
 	for i, s := range strings {
 		if len(s) == 0 {
@@ -250,7 +250,7 @@ func main() {
 	// Publish to topic
 	for i := 0; i < 2; i++ {
 		publish(client)
-		// time.Sleep(1 * time.Second)
+		time.Sleep(1 * time.Second)
 	}
 
 	// Disconnect
