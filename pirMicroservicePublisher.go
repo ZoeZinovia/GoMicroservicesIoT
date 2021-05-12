@@ -6,7 +6,6 @@ import (
 	"log"
 	"os"
 	"os/signal"
-	"strings"
 	"syscall"
 	"time"
 
@@ -17,11 +16,10 @@ import (
 var sessionStatus bool = true
 var counter int = 0
 var start = time.Now()
-var TOPIC string = "LED"
+var TOPIC string = "PIR"
 
-type ledStruct struct {
-	LED_1 bool
-	GPIO  int
+type pirStruct struct {
+	PIR bool
 }
 
 func saveResultToFile(filename string, result string) {
@@ -37,31 +35,33 @@ func saveResultToFile(filename string, result string) {
 }
 
 var messagePubHandler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Message) {
-	counter++
-	if counter == 1 {
-		start = time.Now()
-	}
-	var led ledStruct
-	ledPin := rpio.Pin(12)
-	if strings.Contains(string(msg.Payload()), "Done") {
-		sessionStatus = false
-		ledPin.Output()
-		ledPin.Low()
-		end := time.Now()
-		duration := end.Sub(start).Seconds()
-		resultString := fmt.Sprint("LED subsriber runtime = ", duration, "\n")
-		saveResultToFile("piResultsGo.txt", resultString)
-		fmt.Println("LED subscriber runtime =", duration)
+	fmt.Println("Message received")
+}
+
+func publish(client mqtt.Client) {
+	if !sessionStatus {
+		doneString := "{\"Done\": \"True\"}"
+		client.Publish(TOPIC, 0, false, doneString)
+		return
 	} else {
-		json.Unmarshal([]byte(msg.Payload()), &led)
-		ledPin = rpio.Pin(led.GPIO)
-		ledPin.Output()
-		if led.LED_1 {
-			ledPin.High()
-		} else {
-			ledPin.Low()
+		pirPin := rpio.Pin(17)
+		pirPin.Input()
+		pirReading := pirPin.Read()
+		currentPIR := pirStruct{
+			PIR: pirReading,
 		}
+		jsonPIR := currentPIR.structToJSON()
+		client.Publish(TOPIC, 0, false, string(jsonPIR))
+		return
 	}
+}
+
+func (ps pirStruct) structToJSON() []byte {
+	jsonReading, jsonErr := json.Marshal(ps)
+	if jsonErr != nil {
+		log.Fatal(jsonErr)
+	}
+	return jsonReading
 }
 
 var connectHandler mqtt.OnConnectHandler = func(client mqtt.Client) {
@@ -111,9 +111,14 @@ func main() {
 		panic(token.Error())
 	}
 
-	// Subscribe to topic
-	token := client.Subscribe(TOPIC, 1, nil)
-	token.Wait()
+	// Publish to topic
+	numIterations := 100
+	for i := 0; i < numIterations; i++ {
+		if i == numIterations-1 {
+			sessionStatus = false
+		}
+		publish(client)
+	}
 
 	// Stay in loop to receive message
 	for sessionStatus {
@@ -125,3 +130,13 @@ func main() {
 
 	fmt.Println("Ending run!")
 }
+
+// func publish(client mqtt.Client) {
+// 	num := 10
+// 	for i := 0; i < num; i++ {
+// 		text := fmt.Sprintf("Message %d", i)
+// 		token := client.Publish("led", 0, false, text)
+// 		token.Wait()
+// 		time.Sleep(time.Second)
+// 	}
+// }
