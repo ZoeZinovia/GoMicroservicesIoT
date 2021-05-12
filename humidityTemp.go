@@ -7,12 +7,15 @@ package main
 // #include <stdint.h>
 // #include <string.h>
 // #include <time.h>
+// #include <unistd.h>
 // #define MAX_TIMINGS	85
 // #define DHT_PIN		7	/* GPIO-4 */
 // int data[5] = { 0, 0, 0, 0, 0 };
 // clock_t timer = 0;
 // int read_dht_data()
 // {
+//	timer = clock();
+//	sleep(2)
 //  clock_t current_time = clock();
 //  double duration = (double)(current_time - timer)/CLOCKS_PER_SEC;
 //		FILE *f = fopen("comment.txt", "a");
