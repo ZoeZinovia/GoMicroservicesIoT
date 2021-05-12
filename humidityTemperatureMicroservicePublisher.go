@@ -4,100 +4,97 @@ package main
 // #include <wiringPi.h>
 // #include <stdio.h>
 // #include <stdlib.h>
+// #include <stdint.h>
 // #include <string.h>
-// // Pi dht11 variables
-// #define MAXTIMINGS	85
-// #define DHTPIN		7
-// int dht11_dat[5] = { 0, 0, 0, 0, 0 };
-// // Reading of the dht11 is rather complex in C/C++. See this site that explains how readings are made: http://www.uugear.com/portfolio/dht11-humidity-temperature-sensor-module/
-// int* read_dht11_dat()
+// #include <time.h>
+// #include <unistd.h>
+// #define MAX_TIMINGS	85
+// #define DHT_PIN		7	/* GPIO-4 */
+// int data[5] = { 0, 0, 0, 0, 0 };
+// clock_t timer = 0;
+// int read_dht_data()
 // {
-//	   wiringPiSetup();
-//     u_int8_t laststate	= HIGH;
-//     u_int8_t counter		= 0;
-//     u_int8_t j		= 0, i;
-//     dht11_dat[0] = dht11_dat[1] = dht11_dat[2] = dht11_dat[3] = dht11_dat[4] = 0;
-//     // pull pin down for 18 milliseconds. This is called “Start Signal” and it is to ensure DHT11 has detected the signal from MCU.
-//     pinMode(7, OUTPUT );
-//     digitalWrite(7, 0 );
-//     delay( 18 );
-//     // Then MCU will pull up DATA pin for 40us to wait for DHT11’s response.
-//     digitalWrite( 7, 1 );
-//     delayMicroseconds( 40 );
-//     // Prepare to read the pin
-//     pinMode( 7, INPUT );
-//     // Detect change and read data
-//     for ( i = 0; i < MAXTIMINGS; i++ )
-//     {
-//         counter = 0;
-//         while ( digitalRead( DHTPIN ) == laststate )
-//         {
-//             counter++;
-//             delayMicroseconds( 1 );
-//             if ( counter == 255 )
-//             {
-//                 break;
-//             }
-//         }
-//         laststate = digitalRead( 7 );
-//         if ( counter == 255 )
-//             break;
-//         // Ignore first 3 transitions
-//         if ( (i >= 4) && (i % 2 == 0) )
-//         {
-//             // Add each bit into the storage bytes
-//             dht11_dat[j / 8] <<= 1;
-//             if ( counter > 16 )
-//                 dht11_dat[j / 8] |= 1;
-//             j++;
-//			   FILE *f = fopen("comment.txt", "a");
-// 	   			if (f == NULL)
-// 	  			{
-// 	   				printf("Error opening file!\n");
-// 	   				exit(1);
-// 	   			}
-//	   			fprintf(f, "reached j loop, %d\n", j);
-//	   			fprintf(f, "dht value: , %d, %d, %d, %d, %d\n", dht11_dat[0],dht11_dat[1],dht11_dat[2],dht11_dat[3],dht11_dat[4]);
-//	   			fprintf(f, "dht array: , %d\n", dht11_dat[j/8]);
-//     			fclose(f);
-//         }
-//     }
-//     // Check that 40 bits (8bit x 5 ) were read + verify checksum in the last byte
-//     if ( (j >= 40) && (dht11_dat[4] == ( (dht11_dat[0] + dht11_dat[1] + dht11_dat[2] + dht11_dat[3]) & 0xFF) ) )
-//     {
-//		   FILE *f = fopen("file.txt", "a");
-// 		   if (f == NULL)
-// 		   {
-// 		   		printf("Error opening file!\n");
-// 		   		exit(1);
-// 		   }
-//		   fprintf(f, "Temp: %d, %d, Humidity: %d, %d\n", dht11_dat[0], dht11_dat[1], dht11_dat[2], dht11_dat[3]);
-//         fclose(f);
-//		   return dht11_dat; // If all ok, return pointer to the data array
-//     } else  {
-//	       FILE *f = fopen("file.txt", "a");
-// 		   if (f == NULL)
-// 		   {
-// 		   		printf("Error opening file!\n");
-// 		   		exit(1);
-// 		   }
-//		   fprintf(f, "error :( Temp: %d, %d, Humidity: %d, %d\n", dht11_dat[0], dht11_dat[1], dht11_dat[2], dht11_dat[3]);
-//		   fclose(f);
-//         dht11_dat[0] = 255;
-//         return dht11_dat; //If there was an error, set first array element to -1 as flag to main function
-//     }
+//	wiringPiSetup();
+// 	uint8_t laststate	= HIGH;
+// 	uint8_t counter		= 0;
+// 	uint8_t j			= 0, i;
+// 	data[0] = data[1] = data[2] = data[3] = data[4] = 0;
+// 	/* pull pin down for 18 milliseconds */
+// 	pinMode( DHT_PIN, OUTPUT );
+// 	digitalWrite( DHT_PIN, LOW );
+// 	delay( 18 );
+// 	/* prepare to read the pin */
+// 	digitalWrite( DHT_PIN, HIGH);
+//  delayMicroseconds( 40 );
+// 	pinMode( DHT_PIN, INPUT );
+// 	/* detect change and read data */
+// 	for ( i = 0; i < MAX_TIMINGS; i++ )
+// 	{
+// 		counter = 0;
+// 		while ( digitalRead( DHT_PIN ) == laststate )
+// 		{
+// 			counter++;
+// 			delayMicroseconds( 2 );
+// 			if ( counter == 255 )
+// 				break;
+// 		}
+// 		laststate = digitalRead( DHT_PIN );
+// 		if ( counter == 255 ){
+// 			break;
+//		}
+// 		/* ignore first 3 transitions */
+// 		if ( (i >= 4) && (i % 2 == 0) )
+// 		{
+// 			/* shove each bit into the storage bytes */
+// 			data[j / 8] <<= 1;
+// 			if ( counter > 16 )
+// 				data[j / 8] |= 1;
+// 			j++;
+// 		}
+// 	}
+// 	/*
+// 	 * check we read 40 bits (8bit x 5 ) + verify checksum in the last byte
+// 	 * print it out if data is good
+// 	 */
+// 	if ( (j >= 40) &&
+// 	     (data[4] == ( (data[0] + data[1] + data[2] + data[3]) & 0xFF) ) )
+// 	{
+//		FILE *f = fopen("reading.txt", "w");
+// 	   	if (f == NULL)
+// 	  	{
+// 	   		printf("Error opening file!\n");
+// 	   		exit(1);
+// 	   	}
+//	   	fprintf(f, "%d,%d,%d,%d,%d", data[0], data[1], data[2], data[3], data[4]);
+//     	fclose(f);
+//		timer = clock();
+//		return data[0];
+// 	} else  {
+//		FILE *f = fopen("reading.txt", "w");
+// 	   	if (f == NULL)
+// 	  	{
+// 	   		printf("Error opening file!\n");
+// 	   		exit(1);
+// 	   	}
+//	   	fprintf(f, "%d,%d,%d,%d,%d", data[0], data[1], data[2], data[3], data[4]);
+// 		fclose(f);
+// 		timer = clock();
+//		return data[0];
+// 	}
 // }
 import "C"
 
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
 	"os/signal"
+	"strconv"
+	"strings"
 	"syscall"
 	"time"
-	"unsafe"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 )
@@ -109,6 +106,8 @@ var TOPIC_H string = "Humidity"
 var TOPIC_T string = "Temperature"
 var ADDRESS string
 var PORT = 1883
+var temperatureReading float32 = 0
+var humidityReading float32 = 0
 
 type tempStruct struct {
 	Temp float32
@@ -129,51 +128,35 @@ var messagePubHandler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Me
 }
 
 func publish(client mqtt.Client) {
-	// temperatureReading, humidityReading, _, err :=
-	// 	dht.ReadDHTxxWithRetry(dht.DHT11, 4, false, 10)
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-
-	returnedArray := C.read_dht11_dat()
-
-	fmt.Printf("%T", returnedArray)
-	byteSlice := C.GoBytes(unsafe.Pointer(&returnedArray), 5)
-
-	counter := 0
-	for (byteSlice[0] == 255) && (counter < 5) {
-		returnedArray := C.read_dht11_dat()
-		byteSlice = C.GoBytes(unsafe.Pointer(&returnedArray), 5)
-		counter++
+	if !sessionStatus {
+		doneString := "{\"Done\": \"True\"}"
+		client.Publish(TOPIC_T, 0, false, doneString)
+		client.Publish(TOPIC_H, 0, false, doneString)
+		return
 	}
-	if counter == 5 {
-		fmt.Println("Problem encountered with DHT. Please check.")
-		os.Exit(0)
+	if temperatureReading == 0 && humidityReading == 0 {
+		C.read_dht_data()
+		byteSlice, readErr := ioutil.ReadFile("reading.txt")
+		if readErr != nil {
+			log.Fatal(readErr)
+		}
+		mySlice := byteSliceToIntSlice(byteSlice)
+		temperatureReading = float32(mySlice[2] + (mySlice[3] / 10))
+		humidityReading = float32(mySlice[0] + (mySlice[1] / 10))
 	}
-	mySlice := byteSliceToIntSlice(byteSlice)
-
-	fmt.Println(mySlice[0], mySlice[1], mySlice[2], mySlice[3], mySlice[4])
-	// temperatureReading := mySlice[0] + (mySlice[1] / 10)
-	// humidityReading := mySlice[2] + (mySlice[3] / 10)
-
-	// fmt.Println("temperature:", temperatureReading, ", humidity:", humidityReading)
-
-	// currentTemperature := tempStruct{
-	// 	Temp: temperatureReading,
-	// 	Unit: "C",
-	// }
-	// currentHumidity := humStruct{
-	// 	Humidity: humidityReading,
-	// 	Unit:     "%",
-	// }
-	// jsonTemperature := currentTemperature.structToJSON()
-	// fmt.Println(string(jsonTemperature))
-	// jsonHumidity := currentHumidity.structToJSON()
-	// client.Publish(TOPIC_T, 0, false, string(jsonTemperature))
-	// client.Publish(TOPIC_H, 0, false, string(jsonHumidity))
-	// token1.Wait()
-	// token2.Wait()
-	// time.Sleep(time.Second)
+	currentTemperature := tempStruct{
+		Temp: temperatureReading,
+		Unit: "C",
+	}
+	currentHumidity := humStruct{
+		Humidity: humidityReading,
+		Unit:     "%",
+	}
+	jsonTemperature := currentTemperature.structToJSON()
+	jsonHumidity := currentHumidity.structToJSON()
+	client.Publish(TOPIC_T, 0, false, string(jsonTemperature))
+	client.Publish(TOPIC_H, 0, false, string(jsonHumidity))
+	return
 }
 
 func getJSON(r reading) []byte {
@@ -181,9 +164,17 @@ func getJSON(r reading) []byte {
 }
 
 func byteSliceToIntSlice(bs []byte) []int {
-	result := make([]int, len(bs))
-	for i, b := range bs {
-		result[i] = int(b)
+	strings := strings.Split(string(bs), ",")
+	result := make([]int, len(strings))
+	for i, s := range strings {
+		if len(s) == 0 {
+			continue
+		}
+		n, convErr := strconv.Atoi(s)
+		if convErr != nil {
+			log.Fatal(convErr)
+		}
+		result[i] = n
 	}
 	return result
 }
@@ -225,7 +216,6 @@ func saveResultToFile(filename string, result string) {
 }
 
 func main() {
-
 	// Save the IP address
 	if len(os.Args) <= 1 {
 		fmt.Println("IP address must be provided as a command line argument")
@@ -245,8 +235,6 @@ func main() {
 	// Creat MQTT client
 	opts := mqtt.NewClientOptions()
 	opts.AddBroker(fmt.Sprintf("tcp://%s:%d", ADDRESS, PORT))
-	// opts.SetClientID("go_mqtt_client")
-	// opts.SetDefaultPublishHandler(messagePubHandler)
 	opts.OnConnect = connectHandler
 	opts.OnConnectionLost = connectLostHandler
 	client := mqtt.NewClient(opts)
@@ -255,7 +243,11 @@ func main() {
 	}
 
 	// Publish to topic
-	for i := 0; i < 10; i++ {
+	numIterations := 100
+	for i := 0; i < numIterations; i++ {
+		if i == numIterations-1 {
+			sessionStatus = false
+		}
 		publish(client)
 	}
 
