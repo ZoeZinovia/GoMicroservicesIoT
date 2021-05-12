@@ -6,18 +6,16 @@ package main
 // #include <stdlib.h>
 // #include <stdint.h>
 // #include <string.h>
-// #include <sys/time.h>
+// #include <time.h>
 // #define MAX_TIMINGS	85
 // #define DHT_PIN		7	/* GPIO-4 */
 // int data[5] = { 0, 0, 0, 0, 0 };
-// struct timeval timer;
-// struct timeval current_time;
-// gettimeofday(&timer, NULL);
+// clock_t timer = clock();
 // int read_dht_data()
 // {
-//  gettimeofday(&current_time, NULL);
-//  double duration = (double)(current_time.tv_usec - timer.tv_usec) / 1000000 + (double)(current_time.tv_sec - timer.tv_sec);
-//	printf("duration: %d", duration)
+//  clock_t current_time = clock();
+//  double duration = (double)(current_time - timer)/CLOCKS_PER_SEC;
+//	printf("duration: %d", duration);
 //	wiringPiSetup();
 // 	uint8_t laststate	= HIGH;
 // 	uint8_t counter		= 0;
@@ -71,6 +69,7 @@ package main
 // 	   	}
 //	   	fprintf(f, "%d,%d,%d,%d,%d", data[0], data[1], data[2], data[3], data[4]);
 //     	fclose(f);
+//		timer = clock();
 //		return data[0];
 // 	} else  {
 //		FILE *f = fopen("reading.txt", "w");
@@ -81,6 +80,7 @@ package main
 // 	   	}
 //	   	fprintf(f, "%d,%d,%d,%d,%d", data[0], data[1], data[2], data[3], data[4]);
 // 		fclose(f);
+// 		timer = clock();
 //		return data[0];
 // 	}
 // }
