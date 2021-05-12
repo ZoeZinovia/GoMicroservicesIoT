@@ -128,6 +128,7 @@ func publish(client mqtt.Client) {
 		humidityReading = 0
 	} else {
 		byteSlice, readErr := ioutil.ReadFile("reading.txt")
+		fmt.Println(byteSlice)
 		if readErr != nil {
 			log.Fatal(readErr)
 		}
