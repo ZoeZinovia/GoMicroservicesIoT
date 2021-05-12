@@ -134,8 +134,9 @@ func publish(client mqtt.Client) {
 		client.Publish(TOPIC_H, 0, false, doneString)
 		return
 	}
-	returnedValue := C.read_dht_data()
-	if returnedValue != 0 {
+
+	if temperatureReading == 0 && humidityReading == 0 {
+		C.read_dht_data()
 		byteSlice, readErr := ioutil.ReadFile("reading.txt")
 		if readErr != nil {
 			log.Fatal(readErr)
