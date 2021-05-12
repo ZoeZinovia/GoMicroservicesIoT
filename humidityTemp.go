@@ -135,11 +135,8 @@ func publish(client mqtt.Client) {
 			log.Fatal(readErr)
 		}
 		mySlice := byteSliceToIntSlice(byteSlice)
-		fmt.Println(len(byteSlice), returnedValue)
-		fmt.Println(mySlice[0], mySlice[1], mySlice[2], mySlice[3], mySlice[4])
 		temperatureReading = float32(mySlice[2] + (mySlice[3] / 10))
 		humidityReading = float32(mySlice[0] + (mySlice[1] / 10))
-		fmt.Println("temperature:", temperatureReading, ", humidity:", humidityReading)
 	}
 	currentTemperature := tempStruct{
 		Temp: temperatureReading,
@@ -150,9 +147,7 @@ func publish(client mqtt.Client) {
 		Unit:     "%",
 	}
 	jsonTemperature := currentTemperature.structToJSON()
-	fmt.Println(string(jsonTemperature))
 	jsonHumidity := currentHumidity.structToJSON()
-	fmt.Println(string(jsonHumidity))
 	client.Publish(TOPIC_T, 0, false, string(jsonTemperature))
 	client.Publish(TOPIC_H, 0, false, string(jsonHumidity))
 	// token1.Wait()
