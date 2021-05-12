@@ -79,7 +79,9 @@ package main
 // 	   	}
 //	   	fprintf(f, "%d,%d,%d,%d,%d", data[0], data[1], data[2], data[3], data[4]);
 // 		fclose(f);
-//		return data[0];
+//		clock_t end = clock();
+//      double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+//		return time_spent;
 // 	}
 // }
 import "C"
