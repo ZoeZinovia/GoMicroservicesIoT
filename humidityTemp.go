@@ -128,7 +128,6 @@ func publish(client mqtt.Client) {
 		humidityReading = 0
 	} else {
 		byteSlice, readErr := ioutil.ReadFile("reading.txt")
-		fmt.Println(byteSlice)
 		if readErr != nil {
 			log.Fatal(readErr)
 		}
@@ -165,6 +164,9 @@ func getJSON(r reading) []byte {
 
 func byteSliceToIntSlice(bs []byte) []int {
 	strings := strings.Split(string(bs), ",")
+	for _, s := range strings {
+		fmt.Println(s)
+	}
 	result := make([]int, len(strings))
 	for i, s := range strings {
 		if len(s) == 0 {
