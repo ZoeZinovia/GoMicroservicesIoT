@@ -11,9 +11,9 @@ package main
 // #define MAX_TIMINGS	85
 // #define DHT_PIN		7	/* GPIO-4 */
 // int data[5] = { 0, 0, 0, 0, 0 };
-// clock_t timer = 0;
-// int read_dht_data()
+// double read_dht_data()
 // {
+//  clock_t begin = clock();
 //	wiringPiSetup();
 // 	uint8_t laststate	= HIGH;
 // 	uint8_t counter		= 0;
@@ -67,8 +67,9 @@ package main
 // 	   	}
 //	   	fprintf(f, "%d,%d,%d,%d,%d", data[0], data[1], data[2], data[3], data[4]);
 //     	fclose(f);
-//		timer = clock();
-//		return data[0];
+//		clock_t end = clock();
+//      double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+//		return time_spent;
 // 	} else  {
 //		FILE *f = fopen("reading.txt", "w");
 // 	   	if (f == NULL)
@@ -135,7 +136,8 @@ func publish(client mqtt.Client) {
 		return
 	}
 	if temperatureReading == 0 && humidityReading == 0 {
-		C.read_dht_data()
+		time_spent := C.read_dht_data()
+		fmt.Println(time_spent)
 		byteSlice, readErr := ioutil.ReadFile("reading.txt")
 		if readErr != nil {
 			log.Fatal(readErr)
@@ -220,7 +222,6 @@ func saveResultToFile(filename string, result string) {
 }
 
 func main() {
-	start = time.Now()
 	// Save the IP address
 	if len(os.Args) <= 1 {
 		fmt.Println("IP address must be provided as a command line argument")
