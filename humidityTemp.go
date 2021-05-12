@@ -15,7 +15,14 @@ package main
 // {
 //  clock_t current_time = clock();
 //  double duration = (double)(current_time - timer)/CLOCKS_PER_SEC;
-//	printf("duration: %d", duration);
+//		FILE *f = fopen("comment.txt", "a");
+// 	   	if (f == NULL)
+// 	  	{
+// 	   		printf("Error opening file!\n");
+// 	   		exit(1);
+// 	   	}
+//	   	fprintf(f, "duration: %d", duration);
+//     	fclose(f);
 //	wiringPiSetup();
 // 	uint8_t laststate	= HIGH;
 // 	uint8_t counter		= 0;
