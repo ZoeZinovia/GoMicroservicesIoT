@@ -148,17 +148,17 @@ func publish(client mqtt.Client) {
 	// 	log.Fatal(err)
 	// }
 
-	var returnArray *C.int = C.read_dht_data()
-	length := 5
-	mySlice := (*[1 << 63]C.int)(unsafe.Pointer(returnArray))[:length:length]
-
-	// var returnedValue := C.read_dht_data()
-	// defer C.free(unsafe.Pointer(returnedValue))
+	returnedValue := C.read_dht_data()
+	defer C.free(unsafe.Pointer(returnedValue))
+	goValue := make([]int, 5)
+	for i := range returnedValue {
+		goValue[i] = int(returnedValue[i])
+	}
 	// values := (*[1<<30 ])
 
 	// fmt.Println(returnedValue)
 
-	fmt.Printf("%T", mySlice)
+	fmt.Printf("%T", goValue)
 	// byteSlice := C.GoBytes(unsafe.Pointer(&returnedArray), 5)
 
 	// counter := 0
