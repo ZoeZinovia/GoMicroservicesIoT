@@ -150,7 +150,7 @@ func publish(client mqtt.Client) {
 
 	var returnArray *C.int = C.read_dht_data()
 	length := 5
-	mySlice := (*[1 << 30]C.int)(unsafe.Pointer(returnArray))[:length:length]
+	mySlice := (*[1 << 63]C.int)(unsafe.Pointer(returnArray))[:length:length]
 
 	// var returnedValue := C.read_dht_data()
 	// defer C.free(unsafe.Pointer(returnedValue))
