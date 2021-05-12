@@ -234,8 +234,6 @@ func main() {
 	// Creat MQTT client
 	opts := mqtt.NewClientOptions()
 	opts.AddBroker(fmt.Sprintf("tcp://%s:%d", ADDRESS, PORT))
-	// opts.SetClientID("go_mqtt_client")
-	// opts.SetDefaultPublishHandler(messagePubHandler)
 	opts.OnConnect = connectHandler
 	opts.OnConnectionLost = connectLostHandler
 	client := mqtt.NewClient(opts)
@@ -243,14 +241,14 @@ func main() {
 		panic(token.Error())
 	}
 
-	// Publish to topic
-	numIterations := 100
-	for i := 0; i < numIterations; i++ {
-		if i == numIterations-1 {
-			sessionStatus = false
-		}
-		publish(client)
-	}
+	// // Publish to topic
+	// numIterations := 100
+	// for i := 0; i < numIterations; i++ {
+	// 	if i == numIterations-1 {
+	// 		sessionStatus = false
+	// 	}
+	// 	publish(client)
+	// }
 
 	// Disconnect
 	client.Disconnect(100)
