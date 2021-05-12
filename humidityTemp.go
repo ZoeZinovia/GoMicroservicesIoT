@@ -62,7 +62,7 @@ package main
 // 	   		printf("Error opening file!\n");
 // 	   		exit(1);
 // 	   	}
-//	   	fprintf(f, "%d, %d, %d, %d, %d\n", data[0], data[1], data[2], data[3], data[4]);
+//	   	fprintf(f, "%d,%d,%d,%d,%d\n", data[0], data[1], data[2], data[3], data[4]);
 //     	fclose(f);
 //		return data[0];
 // 	} else  {
