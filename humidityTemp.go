@@ -6,11 +6,18 @@ package main
 // #include <stdlib.h>
 // #include <stdint.h>
 // #include <string.h>
+// #include <sys/time.h>
 // #define MAX_TIMINGS	85
 // #define DHT_PIN		7	/* GPIO-4 */
 // int data[5] = { 0, 0, 0, 0, 0 };
+// struct timeval timer;
+// struct timeval current_time;
+// gettimeofday(&timer, NULL);
 // int read_dht_data()
 // {
+//  gettimeofday(&current_time, NULL);
+//  double duration = (double)(current_time.tv_usec - timer.tv_usec) / 1000000 + (double)(current_time.tv_sec - timer.tv_sec);
+//	printf("duration: %d", duration)
 //	wiringPiSetup();
 // 	uint8_t laststate	= HIGH;
 // 	uint8_t counter		= 0;
