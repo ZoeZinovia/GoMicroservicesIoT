@@ -73,6 +73,7 @@ package main
 // 	   		exit(1);
 // 	   	}
 //	   	fprintf(f, "%d,%d,%d,%d,%d", data[0], data[1], data[2], data[3], data[4]);
+// 		fclose(f);
 //		return data[0];
 // 	}
 // }
@@ -250,7 +251,7 @@ func main() {
 	// Publish to topic
 	for i := 0; i < 2; i++ {
 		publish(client)
-		time.Sleep(2 * time.Second)
+		time.Sleep(1 * time.Second)
 	}
 
 	// Disconnect
