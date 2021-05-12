@@ -156,9 +156,6 @@ func publish(client mqtt.Client) {
 	jsonHumidity := currentHumidity.structToJSON()
 	client.Publish(TOPIC_T, 0, false, string(jsonTemperature))
 	client.Publish(TOPIC_H, 0, false, string(jsonHumidity))
-	// token1.Wait()
-	// token2.Wait()
-	// time.Sleep(time.Second)
 }
 
 func getJSON(r reading) []byte {
@@ -167,9 +164,6 @@ func getJSON(r reading) []byte {
 
 func byteSliceToIntSlice(bs []byte) []int {
 	strings := strings.Split(string(bs), ",")
-	// for _, s := range strings {
-	// 	fmt.Println(s)
-	// }
 	result := make([]int, len(strings))
 	for i, s := range strings {
 		if len(s) == 0 {
@@ -250,7 +244,7 @@ func main() {
 	}
 
 	// Publish to topic
-	numIterations := 10
+	numIterations := 100
 	for i := 0; i < numIterations; i++ {
 		if i == numIterations-1 {
 			sessionStatus = false
