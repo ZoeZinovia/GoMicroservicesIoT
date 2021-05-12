@@ -46,13 +46,18 @@ func publish(client mqtt.Client) {
 	} else {
 		pirPin := rpio.Pin(17)
 		pirPin.Input()
-		pirReading := pirPin.Read()
-		fmt.Println(pirReading)
-		// currentPIR := pirStruct{
-		// 	PIR: pirReading,
-		// }
-		// jsonPIR := currentPIR.structToJSON()
-		// client.Publish(TOPIC, 0, false, string(jsonPIR))
+		readValue := pirPin.Read()
+		var pirReading bool
+		if int(readValue) == 1 {
+			pirReading = true
+		} else {
+			pirReading = false
+		}
+		currentPIR := pirStruct{
+			PIR: pirReading,
+		}
+		jsonPIR := currentPIR.structToJSON()
+		client.Publish(TOPIC, 0, false, string(jsonPIR))
 		return
 	}
 }
