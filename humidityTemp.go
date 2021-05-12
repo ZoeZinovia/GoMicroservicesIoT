@@ -153,8 +153,8 @@ func publish(client mqtt.Client) {
 	fmt.Println(string(jsonTemperature))
 	jsonHumidity := currentHumidity.structToJSON()
 	fmt.Println(string(jsonHumidity))
-	// client.Publish(TOPIC_T, 0, false, string(jsonTemperature))
-	// client.Publish(TOPIC_H, 0, false, string(jsonHumidity))
+	client.Publish(TOPIC_T, 0, false, string(jsonTemperature))
+	client.Publish(TOPIC_H, 0, false, string(jsonHumidity))
 	// token1.Wait()
 	// token2.Wait()
 	// time.Sleep(time.Second)
@@ -220,7 +220,6 @@ func saveResultToFile(filename string, result string) {
 }
 
 func main() {
-
 	// Save the IP address
 	if len(os.Args) <= 1 {
 		fmt.Println("IP address must be provided as a command line argument")
