@@ -132,6 +132,7 @@ func publish(client mqtt.Client) {
 		doneString := "{\"Done\": \"True\"}"
 		client.Publish(TOPIC_T, 0, false, doneString)
 		client.Publish(TOPIC_H, 0, false, doneString)
+		return
 	}
 	returnedValue := C.read_dht_data()
 	if returnedValue != 0 {
