@@ -9,7 +9,7 @@ package main
 // #define MAX_TIMINGS	85
 // #define DHT_PIN		7	/* GPIO-4 */
 // int data[5] = { 0, 0, 0, 0, 0 };
-// int read_dht_data(int *dataOut)
+// int read_dht_data()
 // {
 //	wiringPiSetup();
 // 	uint8_t laststate	= HIGH;
@@ -64,8 +64,7 @@ package main
 // 	   	}
 //	   	fprintf(f, "%d, %d, %d, %d, %d\n", data[0], data[1], data[2], data[3], data[4]);
 //     	fclose(f);
-//		memcpy(data, dataOut, sizeof(int)*5);
-//		return 5;
+//		return data[0];
 // 	} else  {
 //		FILE *f = fopen("reading.txt", "w");
 // 	   	if (f == NULL)
@@ -74,8 +73,7 @@ package main
 // 	   		exit(1);
 // 	   	}
 //	   	fprintf(f, "%d, %d, %d, %d, %d\n", data[0], data[1], data[2], data[3], data[4]);
-//		memcpy(data, dataOut, sizeof(int)*5);
-//		return 5;
+//		return data[0];
 // 	}
 // }
 import "C"
@@ -83,6 +81,7 @@ import "C"
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
 	"os/signal"
@@ -119,59 +118,36 @@ var messagePubHandler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Me
 }
 
 func publish(client mqtt.Client) {
-	// temperatureReading, humidityReading, _, err :=
-	// 	dht.ReadDHTxxWithRetry(dht.DHT11, 4, false, 10)
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
+	returnedValue := C.read_dht_data()
+	var temperatureReading float32
+	var humidityReading float32
+	if returnedValue == 0 {
+		temperatureReading = 0
+		humidityReading = 0
+	} else {
+		byteSlice, readErr := ioutil.ReadFile("reading.txt")
+		if readErr != nil {
+			log.Fatal(readErr)
+		}
+		mySlice := byteSliceToIntSlice(byteSlice)
+		fmt.Println(mySlice[0], mySlice[1], mySlice[2], mySlice[3], mySlice[4])
+		temperatureReading = float32(mySlice[0] + (mySlice[1] / 10))
+		humidityReading = float32(mySlice[2] + (mySlice[3] / 10))
+		fmt.Println("temperature:", temperatureReading, ", humidity:", humidityReading)
+	}
 
-	// values := make([]int, 5)
-	// for i := range values {
-	// 	values[i] = int(i)
-	// }
-	// length := C.read_dht_data(*C.int(&values))
-	// // var returnedValue *C.int = C.read_dht_data()
-
-	// fmt.Println(length)
-	// values := (*[1<<30 ])
-
-	// fmt.Println(returnedValue)
-
-	// fmt.Printf("%T", returnedValue)
-
-	// // gSlice := (*[1 << 30]C.int)(unsafe.Pointer(returnedValue))[:5:5]
-	// byteSlice := C.GoBytes(unsafe.Pointer(&returnedValue), 5)
-	// fmt.Printf("%T", byteSlice)
-
-	// counter := 0
-	// for (byteSlice[0] == 255) && (counter < 5) {
-	// 	returnedArray := C.read_dht11_dat()
-	// 	byteSlice = C.GoBytes(unsafe.Pointer(&returnedArray), 5)
-	// 	counter++
-	// }
-	// if counter == 5 {
-	// 	fmt.Println("Problem encountered with DHT. Please check.")
-	// 	os.Exit(0)
-	// }
-	// mySlice := byteSliceToIntSlice(byteSlice)
-
-	// fmt.Println(mySlice[0], mySlice[1], mySlice[2], mySlice[3], mySlice[4])
-	// temperatureReading := mySlice[0] + (mySlice[1] / 10)
-	// humidityReading := mySlice[2] + (mySlice[3] / 10)
-
-	// fmt.Println("temperature:", temperatureReading, ", humidity:", humidityReading)
-
-	// currentTemperature := tempStruct{
-	// 	Temp: temperatureReading,
-	// 	Unit: "C",
-	// }
-	// currentHumidity := humStruct{
-	// 	Humidity: humidityReading,
-	// 	Unit:     "%",
-	// }
-	// jsonTemperature := currentTemperature.structToJSON()
-	// fmt.Println(string(jsonTemperature))
-	// jsonHumidity := currentHumidity.structToJSON()
+	currentTemperature := tempStruct{
+		Temp: temperatureReading,
+		Unit: "C",
+	}
+	currentHumidity := humStruct{
+		Humidity: humidityReading,
+		Unit:     "%",
+	}
+	jsonTemperature := currentTemperature.structToJSON()
+	fmt.Println(string(jsonTemperature))
+	jsonHumidity := currentHumidity.structToJSON()
+	fmt.Println(string(jsonHumidity))
 	// client.Publish(TOPIC_T, 0, false, string(jsonTemperature))
 	// client.Publish(TOPIC_H, 0, false, string(jsonHumidity))
 	// token1.Wait()
