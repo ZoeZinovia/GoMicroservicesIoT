@@ -72,7 +72,7 @@ package main
 // 	   		printf("Error opening file!\n");
 // 	   		exit(1);
 // 	   	}
-//	   	fprintf(f, "%d, %d, %d, %d, %d\n", data[0], data[1], data[2], data[3], data[4]);
+//	   	fprintf(f, "%d,%d,%d,%d,%d\n", data[0], data[1], data[2], data[3], data[4]);
 //		return data[0];
 // 	}
 // }
@@ -85,6 +85,8 @@ import (
 	"log"
 	"os"
 	"os/signal"
+	"strconv"
+	"strings"
 	"syscall"
 	"time"
 
@@ -160,9 +162,17 @@ func getJSON(r reading) []byte {
 }
 
 func byteSliceToIntSlice(bs []byte) []int {
-	result := make([]int, len(bs))
-	for i, b := range bs {
-		result[i] = int(b)
+	strings := strings.Split(string(bs), ",")
+	result := make([]int, len(strings))
+	for i, s := range strings {
+		if len(s) == 0 {
+			continue
+		}
+		n, convErr := strconv.Atoi(s)
+		if convErr != nil {
+			log.Fatal(convErr)
+		}
+		result[i] = n
 	}
 	return result
 }
