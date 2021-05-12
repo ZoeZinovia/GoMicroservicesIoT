@@ -8,7 +8,7 @@ package main
 // #define MAX_TIMINGS	85
 // #define DHT_PIN		7	/* GPIO-4 */
 // int data[5] = { 0, 0, 0, 0, 0 };
-// int * read_dht_data()
+// int read_dht_data(int *dataOut)
 // {
 //	wiringPiSetup();
 // 	uint8_t laststate	= HIGH;
@@ -86,7 +86,8 @@ package main
 //	 	fprintf(f, "%s", "worked :))\n");
 //	   	fprintf(f, "%d, %d, %d, %d, %d\n", data[0], data[1], data[2], data[3], data[4]);
 //     	fclose(f);
-//		return data;
+//		memcpy(data, dataOut, sizeof(int)*5);
+//		return 5;
 // 	}else  {
 //		FILE *f = fopen("comment.txt", "a");
 // 	   	if (f == NULL)
@@ -96,8 +97,8 @@ package main
 // 	   	}
 //	   	fprintf(f, "%s", "error :(\n");
 //	   	fprintf(f, "%d, %d, %d, %d, %d\n", data[0], data[1], data[2], data[3], data[4]);
-//     	fclose(f);
-//		return data;
+//		memcpy(data, dataOut, sizeof(int)*5);
+//		return 5;
 // 	}
 // }
 import "C"
@@ -148,8 +149,14 @@ func publish(client mqtt.Client) {
 	// 	log.Fatal(err)
 	// }
 
-	var returnedValue *C.int = C.read_dht_data()
+	values := make([]int, 5)
+	for i := range values {
+		values[i] = int(i)
+	}
+	length := C.read_dht_data(*C.int(&values))
+	// var returnedValue *C.int = C.read_dht_data()
 
+	fmt.Println(length)
 	// values := (*[1<<30 ])
 
 	// fmt.Println(returnedValue)
