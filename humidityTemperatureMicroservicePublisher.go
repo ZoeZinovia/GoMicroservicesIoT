@@ -220,6 +220,7 @@ func saveResultToFile(filename string, result string) {
 }
 
 func main() {
+	start = time.Now()
 	// Save the IP address
 	if len(os.Args) <= 1 {
 		fmt.Println("IP address must be provided as a command line argument")
