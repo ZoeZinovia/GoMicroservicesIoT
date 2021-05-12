@@ -156,9 +156,9 @@ func publish(client mqtt.Client) {
 
 	fmt.Printf("%T", returnedValue)
 
-	gSlice := (*[1 << 30]C.int)(unsafe.Pointer(returnedValue))[:5:5]
-	fmt.Printf("%T", gSlice)
-	// byteSlice := C.GoBytes(unsafe.Pointer(&returnedArray), 5)
+	// gSlice := (*[1 << 30]C.int)(unsafe.Pointer(returnedValue))[:5:5]
+	byteSlice := C.GoBytes(unsafe.Pointer(&returnedValue), 5)
+	fmt.Printf("%T", byteSlice)
 
 	// counter := 0
 	// for (byteSlice[0] == 255) && (counter < 5) {
