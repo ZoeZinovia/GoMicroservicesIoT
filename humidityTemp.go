@@ -53,50 +53,26 @@ package main
 // 	 * check we read 40 bits (8bit x 5 ) + verify checksum in the last byte
 // 	 * print it out if data is good
 // 	 */
-//		FILE *f = fopen("comment.txt", "a");
-// 	   	if (f == NULL)
-// 	  	{
-// 	   		printf("Error opening file!\n");
-// 	   		exit(1);
-// 	   	}
-//	   	fprintf(f, "j value: %d\n", j);
-//     	fclose(f);
 // 	if ( (j >= 40) &&
 // 	     (data[4] == ( (data[0] + data[1] + data[2] + data[3]) & 0xFF) ) )
 // 	{
-// 		float h = (float)((data[0] << 8) + data[1]) / 10;
-// 		if ( h > 100 )
-// 		{
-// 			h = data[0];	// for DHT11
-// 		}
-// 		float c = (float)(((data[2] & 0x7F) << 8) + data[3]) / 10;
-// 		if ( c > 125 )
-// 		{
-// 			c = data[2];	// for DHT11
-// 		}
-// 		if ( data[2] & 0x80 )
-// 		{
-// 			c = -c;
-// 		}
-//		FILE *f = fopen("comment.txt", "a");
+//		FILE *f = fopen("reading.txt", "w");
 // 	   	if (f == NULL)
 // 	  	{
 // 	   		printf("Error opening file!\n");
 // 	   		exit(1);
 // 	   	}
-//	 	fprintf(f, "%s", "worked :))\n");
 //	   	fprintf(f, "%d, %d, %d, %d, %d\n", data[0], data[1], data[2], data[3], data[4]);
 //     	fclose(f);
 //		memcpy(data, dataOut, sizeof(int)*5);
 //		return 5;
-// 	}else  {
-//		FILE *f = fopen("comment.txt", "a");
+// 	} else  {
+//		FILE *f = fopen("reading.txt", "w");
 // 	   	if (f == NULL)
 // 	  	{
 // 	   		printf("Error opening file!\n");
 // 	   		exit(1);
 // 	   	}
-//	   	fprintf(f, "%s", "error :(\n");
 //	   	fprintf(f, "%d, %d, %d, %d, %d\n", data[0], data[1], data[2], data[3], data[4]);
 //		memcpy(data, dataOut, sizeof(int)*5);
 //		return 5;
@@ -112,7 +88,6 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
-	"unsafe"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 )
@@ -150,23 +125,23 @@ func publish(client mqtt.Client) {
 	// 	log.Fatal(err)
 	// }
 
-	values := make([]int, 5)
-	for i := range values {
-		values[i] = int(i)
-	}
-	length := C.read_dht_data(*C.int(&values))
-	// var returnedValue *C.int = C.read_dht_data()
+	// values := make([]int, 5)
+	// for i := range values {
+	// 	values[i] = int(i)
+	// }
+	// length := C.read_dht_data(*C.int(&values))
+	// // var returnedValue *C.int = C.read_dht_data()
 
-	fmt.Println(length)
+	// fmt.Println(length)
 	// values := (*[1<<30 ])
 
 	// fmt.Println(returnedValue)
 
-	fmt.Printf("%T", returnedValue)
+	// fmt.Printf("%T", returnedValue)
 
-	// gSlice := (*[1 << 30]C.int)(unsafe.Pointer(returnedValue))[:5:5]
-	byteSlice := C.GoBytes(unsafe.Pointer(&returnedValue), 5)
-	fmt.Printf("%T", byteSlice)
+	// // gSlice := (*[1 << 30]C.int)(unsafe.Pointer(returnedValue))[:5:5]
+	// byteSlice := C.GoBytes(unsafe.Pointer(&returnedValue), 5)
+	// fmt.Printf("%T", byteSlice)
 
 	// counter := 0
 	// for (byteSlice[0] == 255) && (counter < 5) {
