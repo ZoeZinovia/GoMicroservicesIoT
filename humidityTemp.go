@@ -21,7 +21,7 @@ package main
 // 	   		printf("Error opening file!\n");
 // 	   		exit(1);
 // 	   	}
-//	   	fprintf(f, "duration: %d", duration);
+//	   	fprintf(f, "duration: %d\n", duration);
 //     	fclose(f);
 //	wiringPiSetup();
 // 	uint8_t laststate	= HIGH;
