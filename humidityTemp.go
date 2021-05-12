@@ -97,7 +97,7 @@ package main
 //	   	fprintf(f, "%s", "error :(\n");
 //	   	fprintf(f, "%d, %d, %d, %d, %d\n", data[0], data[1], data[2], data[3], data[4]);
 //     	fclose(f);
-//		return c;
+//		return 0;
 // 	}
 // }
 import "C"
