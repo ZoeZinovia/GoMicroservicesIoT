@@ -8,7 +8,7 @@ package main
 // #define MAX_TIMINGS	85
 // #define DHT_PIN		7	/* GPIO-4 */
 // int data[5] = { 0, 0, 0, 0, 0 };
-// float read_dht_data()
+// int read_dht_data()
 // {
 //	wiringPiSetup();
 // 	uint8_t laststate	= HIGH;
@@ -86,7 +86,7 @@ package main
 //	 	fprintf(f, "%s", "worked :))\n");
 //	   	fprintf(f, "%d, %d, %d, %d, %d\n", data[0], data[1], data[2], data[3], data[4]);
 //     	fclose(f);
-//		return c;
+//		return (int)c;
 // 	}else  {
 //		FILE *f = fopen("comment.txt", "a");
 // 	   	if (f == NULL)
@@ -148,6 +148,8 @@ func publish(client mqtt.Client) {
 	// }
 
 	returnedValue := C.read_dht_data()
+
+	fmt.Println(returnedValue)
 
 	fmt.Printf("%T", returnedValue)
 	// byteSlice := C.GoBytes(unsafe.Pointer(&returnedArray), 5)
