@@ -34,7 +34,7 @@ package main
 // 		while ( digitalRead( DHT_PIN ) == laststate )
 // 		{
 // 			counter++;
-// 			delayMicroseconds( 1 );
+// 			delayMicroseconds( 2 );
 // 			if ( counter == 255 )
 // 				break;
 // 		}
@@ -79,9 +79,7 @@ package main
 // 	   	}
 //	   	fprintf(f, "%d,%d,%d,%d,%d", data[0], data[1], data[2], data[3], data[4]);
 // 		fclose(f);
-//		clock_t end = clock();
-//      double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
-//		return time_spent;
+//		return data[0];
 // 	}
 // }
 import "C"
