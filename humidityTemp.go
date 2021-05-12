@@ -162,13 +162,13 @@ func publish(client mqtt.Client) {
 	// 	fmt.Println("Problem encountered with DHT. Please check.")
 	// 	os.Exit(0)
 	// }
-	mySlice := byteSliceToIntSlice(byteSlice)
+	// mySlice := byteSliceToIntSlice(byteSlice)
 
 	// fmt.Println(mySlice[0], mySlice[1], mySlice[2], mySlice[3], mySlice[4])
-	temperatureReading := mySlice[0] + (mySlice[1] / 10)
-	humidityReading := mySlice[2] + (mySlice[3] / 10)
+	// temperatureReading := mySlice[0] + (mySlice[1] / 10)
+	// humidityReading := mySlice[2] + (mySlice[3] / 10)
 
-	fmt.Println("temperature:", temperatureReading, ", humidity:", humidityReading)
+	// fmt.Println("temperature:", temperatureReading, ", humidity:", humidityReading)
 
 	// currentTemperature := tempStruct{
 	// 	Temp: temperatureReading,
