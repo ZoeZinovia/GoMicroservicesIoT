@@ -244,9 +244,9 @@ func main() {
 	}
 
 	// Publish to topic
-	for i := 0; i < 2; i++ {
+	for i := 0; i < 1; i++ {
 		publish(client)
-		time.Sleep(2 * time.Second)
+		// time.Sleep(2 * time.Second)
 	}
 
 	// Disconnect
