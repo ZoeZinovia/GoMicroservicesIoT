@@ -128,6 +128,11 @@ var messagePubHandler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Me
 }
 
 func publish(client mqtt.Client) {
+	if !sessionStatus {
+		doneString := "{\"Done\": \"True\"}"
+		client.Publish(TOPIC_T, 0, false, doneString)
+		client.Publish(TOPIC_H, 0, false, doneString)
+	}
 	returnedValue := C.read_dht_data()
 	if returnedValue != 0 {
 		byteSlice, readErr := ioutil.ReadFile("reading.txt")
@@ -244,9 +249,12 @@ func main() {
 	}
 
 	// Publish to topic
-	for i := 0; i < 10; i++ {
+	numIterations := 10
+	for i := 0; i < numIterations; i++ {
+		if i == numIterations-1 {
+			sessionStatus = false
+		}
 		publish(client)
-		// time.Sleep(1 * time.Second)
 	}
 
 	// Disconnect
