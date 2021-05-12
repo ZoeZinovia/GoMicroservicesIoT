@@ -15,7 +15,7 @@ package main
 // int read_dht_data()
 // {
 //	timer = clock();
-//	sleep(2)
+//	sleep(2);
 //  clock_t current_time = clock();
 //  double duration = (double)(current_time - timer)/CLOCKS_PER_SEC;
 //		FILE *f = fopen("comment.txt", "a");
