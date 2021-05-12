@@ -106,6 +106,8 @@ var TOPIC_H string = "Humidity"
 var TOPIC_T string = "Temperature"
 var ADDRESS string
 var PORT = 1883
+var temperatureReading float32 = 0
+var humidityReading float32 = 0
 
 type tempStruct struct {
 	Temp float32
@@ -127,12 +129,7 @@ var messagePubHandler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Me
 
 func publish(client mqtt.Client) {
 	returnedValue := C.read_dht_data()
-	var temperatureReading float32
-	var humidityReading float32
-	if returnedValue == 0 {
-		temperatureReading = 0
-		humidityReading = 0
-	} else {
+	if returnedValue != 0 {
 		byteSlice, readErr := ioutil.ReadFile("reading.txt")
 		if readErr != nil {
 			log.Fatal(readErr)
@@ -144,7 +141,6 @@ func publish(client mqtt.Client) {
 		humidityReading = float32(mySlice[0] + (mySlice[1] / 10))
 		fmt.Println("temperature:", temperatureReading, ", humidity:", humidityReading)
 	}
-
 	currentTemperature := tempStruct{
 		Temp: temperatureReading,
 		Unit: "C",
