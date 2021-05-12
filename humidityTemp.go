@@ -110,6 +110,7 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
+	"unsafe"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 )
@@ -154,6 +155,9 @@ func publish(client mqtt.Client) {
 	// fmt.Println(returnedValue)
 
 	fmt.Printf("%T", returnedValue)
+
+	gSlice := (*[1 << 30]C.int)(unsafe.Pointer(returnedValue))[:5:5]
+	fmt.Printf("%T", gSlice)
 	// byteSlice := C.GoBytes(unsafe.Pointer(&returnedArray), 5)
 
 	// counter := 0
