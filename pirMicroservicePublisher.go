@@ -126,23 +126,12 @@ func main() {
 		publish(client)
 	}
 
-	// Stay in loop to receive message
-	for sessionStatus {
-		//Do nothing
-	}
-
 	// Disconnect
 	client.Disconnect(100)
 
-	fmt.Println("Ending run!")
+	end := time.Now()
+	duration := end.Sub(start).Seconds()
+	resultString := fmt.Sprint("Humidity and temperature runtime after readings = ", duration, "\n")
+	saveResultToFile("piResultsGo.txt", resultString)
+	fmt.Println(resultString)
 }
-
-// func publish(client mqtt.Client) {
-// 	num := 10
-// 	for i := 0; i < num; i++ {
-// 		text := fmt.Sprintf("Message %d", i)
-// 		token := client.Publish("led", 0, false, text)
-// 		token.Wait()
-// 		time.Sleep(time.Second)
-// 	}
-// }
