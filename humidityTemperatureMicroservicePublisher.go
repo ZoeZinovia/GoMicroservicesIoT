@@ -146,8 +146,9 @@ func publish(client mqtt.Client) {
 		humidityReading = float32(mySlice[0] + (mySlice[1] / 10))
 		end := time.Now()
 		duration := end.Sub(start).Seconds()
-		fmt.Println("Humidity and temperature runtime after readings =", duration)
-
+		resultString := fmt.Sprint("Humidity and temperature runtime = ", duration, "\n")
+		saveResultToFile("piResultsGo.txt", resultString)
+		fmt.Println(resultString)
 	}
 	currentTemperature := tempStruct{
 		Temp: temperatureReading,
