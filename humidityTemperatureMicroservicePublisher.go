@@ -238,6 +238,10 @@ func main() {
 		os.Exit(0)
 	}()
 
+	end1 := time.Now()
+	duration1 := end1.Sub(start).Seconds()
+	fmt.Println("Humidity and temperature runtime before connect =", duration1)
+
 	// Creat MQTT client
 	opts := mqtt.NewClientOptions()
 	opts.AddBroker(fmt.Sprintf("tcp://%s:%d", ADDRESS, PORT))
@@ -247,9 +251,9 @@ func main() {
 	if token := client.Connect(); token.Wait() && token.Error() != nil {
 		panic(token.Error())
 	}
-	end1 := time.Now()
-	duration1 := end1.Sub(start).Seconds()
-	fmt.Println("Humidity and temperature runtime before readings =", duration1)
+	end1 = time.Now()
+	duration1 = end1.Sub(start).Seconds()
+	fmt.Println("Humidity and temperature runtime before readings after connect =", duration1)
 
 	// Publish to topic
 	numIterations := 100
