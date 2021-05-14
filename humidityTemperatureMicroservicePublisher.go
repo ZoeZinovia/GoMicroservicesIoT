@@ -247,6 +247,9 @@ func main() {
 	if token := client.Connect(); token.Wait() && token.Error() != nil {
 		panic(token.Error())
 	}
+	end1 := time.Now()
+	duration1 := end1.Sub(start).Seconds()
+	fmt.Println("Humidity and temperature runtime before readings =", duration1)
 
 	// Publish to topic
 	numIterations := 100
