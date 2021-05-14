@@ -146,7 +146,7 @@ func publish(client mqtt.Client) {
 		humidityReading = float32(mySlice[0] + (mySlice[1] / 10))
 		end := time.Now()
 		duration := end.Sub(start).Seconds()
-		resultString := fmt.Sprint("Humidity and temperature runtime = ", duration, "\n")
+		resultString := fmt.Sprint("Humidity and temperature runtime after readings = ", duration, "\n")
 		saveResultToFile("piResultsGo.txt", resultString)
 		fmt.Println(resultString)
 	}
@@ -266,5 +266,5 @@ func main() {
 	duration := end.Sub(start).Seconds()
 	resultString := fmt.Sprint("Humidity and temperature runtime = ", duration, "\n")
 	saveResultToFile("piResultsGo.txt", resultString)
-	fmt.Println("Humidity and temperature runtime =", duration)
+	fmt.Println("Humidity and temperature runtime at end =", duration)
 }
