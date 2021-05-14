@@ -141,7 +141,8 @@ func publish(client mqtt.Client) {
 	dhtDuration = dhtEnd.Sub(dhtStart).Seconds()
 	if (temperatureReading == 0 && humidityReading == 0) || dhtDuration > 1 {
 		fmt.Println("Checking readings!")
-		time_spent := C.read_dht_data()
+		C.read_dht_data()
+		// time_spent := C.read_dht_data()
 		dhtStart = time.Now()
 		// fmt.Println("Humidity and temperature runtime readings = ", time_spent)
 		byteSlice, readErr := ioutil.ReadFile("reading.txt")
