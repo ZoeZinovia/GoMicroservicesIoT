@@ -143,7 +143,7 @@ func publish(client mqtt.Client) {
 		fmt.Println("Checking readings!")
 		time_spent := C.read_dht_data()
 		dhtStart = time.Now()
-		fmt.Println("Humidity and temperature runtime readings = ", time_spent)
+		// fmt.Println("Humidity and temperature runtime readings = ", time_spent)
 		byteSlice, readErr := ioutil.ReadFile("reading.txt")
 		if readErr != nil {
 			log.Fatal(readErr)
