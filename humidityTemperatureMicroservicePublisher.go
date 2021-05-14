@@ -140,11 +140,8 @@ func publish(client mqtt.Client) {
 	dhtEnd = time.Now()
 	dhtDuration = dhtEnd.Sub(dhtStart).Seconds()
 	if (temperatureReading == 0 && humidityReading == 0) || dhtDuration > 1 {
-		fmt.Println("Checking readings!")
 		C.read_dht_data()
-		// time_spent := C.read_dht_data()
 		dhtStart = time.Now()
-		// fmt.Println("Humidity and temperature runtime readings = ", time_spent)
 		byteSlice, readErr := ioutil.ReadFile("reading.txt")
 		if readErr != nil {
 			log.Fatal(readErr)
@@ -152,11 +149,6 @@ func publish(client mqtt.Client) {
 		mySlice := byteSliceToIntSlice(byteSlice)
 		temperatureReading = float32(mySlice[2] + (mySlice[3] / 10))
 		humidityReading = float32(mySlice[0] + (mySlice[1] / 10))
-		// end := time.Now()
-		// duration := end.Sub(start).Seconds()
-		// resultString := fmt.Sprint("Humidity and temperature runtime after readings = ", duration)
-		// saveResultToFile("piResultsGo.txt", resultString)
-		// fmt.Println(resultString)
 	}
 	currentTemperature := tempStruct{
 		Temp: temperatureReading,
