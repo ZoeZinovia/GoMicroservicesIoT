@@ -118,7 +118,7 @@ func main() {
 	}
 
 	// Publish to topic
-	numIterations := 100
+	numIterations := 10000
 	for i := 0; i < numIterations; i++ {
 		if i == numIterations-1 {
 			sessionStatus = false
