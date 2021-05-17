@@ -108,7 +108,7 @@ func main() {
 	// Creat MQTT client
 	opts := mqtt.NewClientOptions()
 	opts.AddBroker(fmt.Sprintf("tcp://%s:%d", ADDRESS, PORT))
-	opts.SetClientID("go_mqtt_client")
+	opts.SetClientID("go_mqtt_client_pir")
 	opts.SetDefaultPublishHandler(messagePubHandler)
 	opts.OnConnect = connectHandler
 	opts.OnConnectionLost = connectLostHandler
