@@ -133,5 +133,5 @@ func main() {
 	duration := end.Sub(start).Seconds()
 	resultString := fmt.Sprint("PIR runtime = ", duration, "\n")
 	saveResultToFile("piResultsGo.txt", resultString)
-	fmt.Println(resultString)
+	fmt.Println("PIR runtime = ", duration)
 }
