@@ -5,9 +5,8 @@
 #start=$(date +%s.%N)
 
 /usr/bin/time -v -o memoryResultsGo.txt -a ./humTempPub $1 &
-/usr/bin/time -v -o memoryResultsGo.txt -a ./pirPub $1 
-#&
-#/usr/bin/time -v -o memoryResultsGo.txt -a ./ledSub $1;
+/usr/bin/time -v -o memoryResultsGo.txt -a ./pirPub $1 &
+/usr/bin/time -v -o memoryResultsGo.txt -a ./ledSub $1;
 
 #end=$(date +%s.%N)
 
