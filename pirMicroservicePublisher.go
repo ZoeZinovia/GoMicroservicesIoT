@@ -75,7 +75,7 @@ var connectHandler mqtt.OnConnectHandler = func(client mqtt.Client) {
 }
 
 var connectLostHandler mqtt.ConnectionLostHandler = func(client mqtt.Client, err error) {
-	// fmt.Printf("Connection lost: %v", err)
+	fmt.Printf("Connection lost: %v", err)
 }
 
 var ADDRESS string
