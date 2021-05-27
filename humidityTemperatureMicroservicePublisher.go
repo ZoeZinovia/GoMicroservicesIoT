@@ -258,7 +258,7 @@ func main() {
 	// fmt.Println("Humidity and temperature runtime before readings after connect =", duration1)
 
 	// Publish to topic
-	numIterations := 10000
+	numIterations := 1000000
 	for i := 0; i < numIterations; i++ {
 		if i == numIterations-1 {
 			sessionStatus = false
@@ -271,6 +271,6 @@ func main() {
 	end := time.Now()
 	duration := end.Sub(start).Seconds()
 	resultString := fmt.Sprint("Humidity and temperature runtime = ", duration, "\n")
-	saveResultToFile("piResultsGo.txt", resultString)
+	saveResultToFile("piResultsGoLong.txt", resultString)
 	fmt.Println("Humidity and temperature runtime at end =", duration)
 }
