@@ -258,7 +258,7 @@ func main() {
 	// fmt.Println("Humidity and temperature runtime before readings after connect =", duration1)
 
 	// Publish to topic
-	numIterations := 1000000
+	numIterations := 100000
 	for i := 0; i < numIterations; i++ {
 		if i == numIterations-1 {
 			sessionStatus = false
