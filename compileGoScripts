@@ -1,5 +1,5 @@
-#Compile go scripts in on the publisher side.
-#Run by using the following line in the correct directory in terminal: bash compileGoScripts
+# Compile go scripts in on the publisher side.
+# Run by using the following line in the correct directory in terminal: bash compileGoScripts
 
 go build -o ledSub ledMicroserviceSubscriber.go
 go build -o humTempPub humidityTemperatureMicroservicePublisher.go
