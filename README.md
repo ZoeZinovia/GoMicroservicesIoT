@@ -21,7 +21,7 @@ There are a number of requirements for this project. All requirements must be in
 * WiringPi is [required]() since Go-rpio doesn't interface with a dht11 sensor.
 * There are a few other Go library imports that should not require additional installations. 
 
-Additionally, MQTT mosquitto or another MQTT broker must be installed on the device that will receive messages from the embedded device. See [here](https://mosquitto.org/) for more information.
+Additionally, MQTT Mosquitto or another MQTT broker must be installed on the device that will receive messages from the embedded device. See [here](https://mosquitto.org/) for more information.
 
 ### Installing and using
 
@@ -33,5 +33,5 @@ Additionally, MQTT mosquitto or another MQTT broker must be installed on the dev
 ```mosquitto_sub -h <embedded device ip address> -t Temperature```
 * The possible topics are: Temperature, Humidity or PIR
 * You can also publish messages to the Led actuator with the following command:
-```mosquitto_pub -h <embedded device ip address> -m <value> -t led```
+```mosquitto_pub -h <embedded device ip address> -m <value> -t LED```
   where value is True if you want the led to turn on or false otherwise
