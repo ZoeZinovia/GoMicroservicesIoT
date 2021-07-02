@@ -1,6 +1,6 @@
 # GoMicroservicesIoT
 
-A microservices IoT application was developed for Unix devices.
+A microservices IoT application was developed for embedded devices.
 
 ## Description
 
